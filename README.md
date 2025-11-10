@@ -7,7 +7,41 @@ This repository houses the final project's source code made by [Samuel Matamoros
 The game is writen in [`Python`](python.org), using the graphics library [`Pyxel`](https://github.com/kitao/pyxel). 
 
 > [!NOTE]
-> The project includes a `venv` (virtual environment) with Python3.12. The choice to run this specific version is in order for the Pyxel library to properly work on all platforms as with the release of Python3.13 several breaking changes made the library not work in `GNU/Linux` systems.
+> No `venv` is included in this repository in order to maximize compatibility. In order to create your own `venv` to run the game follow the instructions in the [requirements](#requirements) section.
+<!-- > The project includes a `venv` (virtual environment) with Python3.12. The choice to run this specific version is in order for the Pyxel library to properly work on all platforms as with the release of Python3.13 several breaking changes made the library not work in `GNU/Linux` systems. -->
+
+## Running and working with the code
+
+In order to have an ideal environment in which to develop the game, please read the following section carefully and comprise with the specified bellow.
+
+### Python
+
+Python version can be any version greater than Python3, preferably Python3.13 or greater. 
+
+> [!WARNING]
+> For linux users, `Python3.13` may not work as the inclusion of breaking changes to the release might have adversary behaviour with the `Pyxel` library. 
+>
+> `Python3.12` is recomended to linux users.
+
+### Virtual Environment (`venv`)
+
+In order to work in an isolated and controlled environment, the use of a [virtual environment]() (`venv` for short) is recomended. You can create one by executing the following command in the project directory:
+
+```bash
+python -m venv .venv
+```
+
+The final `.venv` is just the name the virtual environment directory will have, for maximal compatibility *do not* change it please.
+
+### Requirements
+
+The libraries that will be used in this project will be stored in the [requirements.txt](/requirements.txt) file and can be installed through the `pip` package manager with:
+
+```bash
+pip install -r requirements.txt
+```
+
+Please be sure to have the requirements installed before you run any of the code.
 
 ## Roadmap / Changelog
 
@@ -85,6 +119,7 @@ rule table:
 
 ## Sources and relevant links
 
- - python.org
- - https://github.com/kitao/pyxel
- 
+- https://www.python.org/
+- https://github.com/kitao/pyxel 
+- https://itizso.itch.io/nintendo-mario-bros for the inspiration
+- https://github.com/guluc3m/report-template-typst for the report template
