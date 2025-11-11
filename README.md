@@ -7,7 +7,7 @@ This repository houses the final project's source code made by [Samuel Matamoros
 The game is writen in [`Python`](python.org), using the graphics library [`Pyxel`](https://github.com/kitao/pyxel). 
 
 > [!NOTE]
-> No `venv` is included in this repository in order to maximize compatibility. In order to create your own `venv` to run the game follow the instructions in the [requirements](#requirements) section.
+> No `venv` is included in this repository in order to maximize compatibility. In order to create your own `venv` to run the game follow the instructions in the [Virtual Environment](#Virtual-environment) section.
 <!-- > The project includes a `venv` (virtual environment) with Python3.12. The choice to run this specific version is in order for the Pyxel library to properly work on all platforms as with the release of Python3.13 several breaking changes made the library not work in `GNU/Linux` systems. -->
 
 ## Running and working with the code
@@ -23,7 +23,7 @@ Python version can be any version greater than Python3, preferably Python3.13 or
 >
 > `Python3.12` is recomended to linux users.
 
-### Virtual Environment (`venv`)
+### Virtual Environment
 
 In order to work in an isolated and controlled environment, the use of a [virtual environment]() (`venv` for short) is recomended. You can create one by executing the following command in the project directory:
 
@@ -48,10 +48,8 @@ Please be sure to have the requirements installed before you run any of the code
 ### First steps.
 
 - [x] Stored project instructions under [`instructions/instructions.pdf`](/instructions/instructions.pdf)
-- [x] [`.venv`](/.venv) created with Python3.12.12
-- [x] Downloaded the `Pyxel` library (`pip install pyxel`)
-- [ ] Downloaded/Created assets for the game
-<!-- - [ ]  -->
+- [x] Created the [`requirements.txt`](/requirements.txt) file
+- [x] Downloaded/Created assets for the game
 
 
 ### Sprint 1: Objects and graphical interface
