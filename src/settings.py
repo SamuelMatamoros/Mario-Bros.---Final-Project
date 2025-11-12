@@ -1,0 +1,71 @@
+"""
+This script contains all the constants for the game.
+"""
+
+# Dimensions
+
+TILE_DIMENSION = 16
+
+MAX_WIDTH = 14*TILE_DIMENSION
+# MIN_WIDTH = 22*TILE_DIMENSION
+MIN_WIDTH = 8*TILE_DIMENSION
+DEF_WIDTH = 11*TILE_DIMENSION
+
+
+MAX_HEIGHT = 10*TILE_DIMENSION
+MIN_HEIGHT = 4*TILE_DIMENSION
+DEF_HEIGHT = 8*TILE_DIMENSION
+
+# Sprites
+
+# NAME = (img_bank, x_start, y_start, with, height, [colkey])
+MARIO_DEF_RIGHT = (0, 0, 0, 16, 16, 0)
+MARIO_PACKAGE = (0, 16, 0, 16, 16, 0)
+MARIO_LOOK_LEFT_SMEAR = (0, 32, 0, 16, 16, 0)
+MARIO_LOOK_LEFT = (0, 48, 0, 16, 16, 0)
+MARIO_REST = (0, 0, 16, 16, 16, 0)
+MARIO_DEF_LEFT = (0, 16, 16, 16, 16, 0)
+MARIO_REPRIMAND = (0, 40, 16, 16, 16, 0)
+
+LUIGI_DEF_LEFT = (0, 0, 32, 16, 16, 0)
+LUIGI_PACKAGE = (0, 16, 23, 16, 16, 0)
+LUIGI_LOOK_LEFT_SMEAR = (0, 32, 32, 16, 16, 0)
+LUIGI_LOOK_LEFT = (0, 48, 32, 16, 16, 0)
+LUIGI_REST = (0, 0, 48, 16, 16, 0)
+LUIGI_DEF_RIGHT = (0, 16, 48, 16, 16, 0)
+LUIGI_REPRIMAND = (0, 32, 48, 16, 16, 0)
+
+BOSS_ARMS_UP = (0, 0, 64, 16, 16, 0)
+BOSS_ARMS_DOWN = (0, 16, 64, 16, 16, 0)
+
+PACKAGE_1 = (1, 0, 0, 16, 16, 0)
+PACKAGE_2 = (1, 16, 0, 16, 16, 0)
+PACKAGE_3 = (1, 32, 0, 16, 16, 0)
+PACKAGE_4 = (1, 48, 0, 16, 16, 0)
+PACKAGE_5 = (1, 0, 16, 16, 16, 0)
+
+TRUCK_HEAD = (1, 0, 32, 16, 16, 0)
+TRUCK_BED_0 = (1, 16, 32, 16, 16, 0)
+TRUCK_BED_1 = (1, 0, 48, 16, 16, 0)
+TRUCK_BED_2 = (1, 16, 48, 16, 16, 0)
+TRUCK_BED_3 = (1, 32, 48, 16, 16, 0)
+TRUCK_BED_4 = (1, 48, 48, 16, 16, 0)
+TRUCK_BED_5 = (1, 0, 64, 16, 16, 0)
+TRUCK_BED_6 = (1, 16, 64, 16, 16, 0)
+TRUCK_BED_7 = (1, 32, 64, 16, 16, 0)
+TRUCK_BED_8 = (1, 48, 64, 16, 16, 0)
+
+CONVEYOR_LEFT_0 = (1, 32, 80, 16, 16, 0)
+CONVEYOR_LEFT_1 = (1, 48, 80, 16, 16, 0)
+CONVEYOR_RIGHT_0 = (1, 32, 96, 16, 16, 0)
+CONVEYOR_RIGHT_1 = (1, 48, 96, 16, 16, 0)
+CONVEYOR_0 = (1, 0, 96, 16, 16, 0)
+CONVEYOR_0 = (1, 16, 96, 16, 16, 0)
+
+PIPE_BIG = (1, 32, 32, 16, 16, 0)
+MACHINE = (1, 48, 32, 16, 16, 0)
+DOOR = (1, 0, 80, 16, 16, 0)
+HOR_HALF_PIPE = (1, 0, 124, 8, 4, 0)
+L_PIPE = (1, 16, 118, 10, 10, 0)
+VERT_PIPE = (1, 38, 112, 4, 16, 0)
+STAIR = (1, 48, 112, 16, 16, 0, 0)
