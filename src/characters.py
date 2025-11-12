@@ -3,8 +3,6 @@ class Character:
     Class to represent a game character (Mario or Luigi).
 
     Attributes:
-        name : str
-            The character's name ("Mario" or "Luigi").
         side : str
             The side of the conveyor the character is on ("left" or "right").
         level : int
@@ -15,7 +13,7 @@ class Character:
             The path or identifier for the character's sprite image.
     """
 
-    def __init__(self, name: str, side: str, level: int):
+    def __init__(self, side: str, level: int, sprite: tuple):
         """
         This method is used to create Character objects.
 
@@ -24,27 +22,10 @@ class Character:
         :param level: int. Platform number (1, 2, 3, 4).
         :param sprite: str. Reference to the sprite for the character.
         """
-        self.name = name
         self.side = side
         self.level = level
         self.has_package = False
-        if self.name == "Mario":
-            self.sprite = "mario_image.png"
-        elif self.name == "Luigi":
-            self.sprite = "luigi_image.png"
-        # Format of the sprite to be changed
-
-
-    # name property
-    @property
-    def name(self) -> str:
-        return self.__name
-
-    @name.setter
-    def name(self, name: str):
-        if not isinstance(name, str):
-            raise TypeError("Name must be a string")
-        self.__name = name
+        self.sprite = sprite
 
     # side property
     @property
@@ -79,24 +60,25 @@ class Character:
             raise TypeError("has_package must be a boolean")
         self.__has_package = has_package
 
-    # !!!!!!sprite property (i believe this is wrong and unnecesary it might be erased)!!!!!!
-    # I dont really know yet the image representation system so this is probably wrong
     @property
-    def sprite(self) -> str:
+    def sprite(self) -> tuple:
         return self.__sprite
 
     @sprite.setter
-    def sprite(self, sprite: str):
-        if not isinstance(sprite, str):
+    def sprite(self, sprite: tuple):
+        if not isinstance(sprite, tuple):
             raise TypeError("sprite must be a string")
-        self.__sprite = sprite
+        elif len(sprite) != 6:
+            raise ValueError("sprite lenght must be 6")
+        else:
+            self.__sprite = sprite
 
     def __str__(self) -> str:
         """
         Return a human-readable string representation of the character.
         """
-        return (f"{self.name} is on the {self.side} side at level {self.level}, "
-                f"{'holding a package' if self.has_package else 'not holding a package'}, "
+        return (f"side {self.side}\nlevel {self.level}"
+                f"has package? {self.has_package}"
                 f"sprite: {self.sprite}")
 
     def __repr__(self) -> str:

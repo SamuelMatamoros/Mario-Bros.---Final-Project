@@ -1,3 +1,6 @@
+import settings
+
+
 class Package:
     """
     Class to represent a game package.
@@ -21,24 +24,7 @@ class Package:
         """
         self.level = level
         self.state = state
-        if self.level == 0:
-            self.sprite = "package0.png"
-        elif self.level == 1:
-            self.sprite = "package1.png"
-        elif self.level == 2:
-            self.sprite = "package2.png"
-        elif self.level == 3:
-            self.sprite = "package3.png"
-        elif self.level == 4:
-            self.sprite = "package4.png"
-        elif self.level == 5:
-            self.sprite = "package5.png"
-        elif self.level == 6:
-            self.sprite = "package_at_truck.png"
-        elif self.state == "broken":
-            self.sprite = "package_broken.png"
-        # All this "image_x.png to be changed to the correct format"
-
+        self.sprite = settings.PACKAGE_1
 
     # level property
     @property
@@ -47,8 +33,10 @@ class Package:
 
     @level.setter
     def level(self, level: int):
-        if not isinstance(level, int) or level < 0 or level > 6:
-            raise ValueError("Level must be an int greater or equal to 0 and lower than 6")
+        if not isinstance(level, int):
+            raise ValueError("Level must be an integer")
+        elif level < 0 or level > 6:
+            raise ValueError("Level must be between 0 and 6")
         self.__level = level
 
     # state property
@@ -59,22 +47,26 @@ class Package:
     @state.setter
     def state(self, state: str):
         valid_states = ("in_conveyor", "handled", "broken", "at_truck")
-        if state not in valid_states:
+        if not isinstance(state, str):
+            raise TypeError("package state must be a str")
+        elif state not in valid_states:
             raise ValueError(f"State must be one of {valid_states}")
-        self.__state = state
+        else:
+            self.__state = state
 
-
-
-    # !!!!!!sprite property (i believe this is wrong and unnecesary it might be erased)!!!!!!
+    # sprite property
     @property
-    def sprite(self) -> str:
+    def sprite(self) -> tuple:
         return self.__sprite
 
     @sprite.setter
-    def sprite(self, sprite: str):
-        if not isinstance(sprite, str):
-            raise TypeError("sprite must be a string")
-        self.__sprite = sprite
+    def sprite(self, sprite: tuple):
+        if not isinstance(sprite, tuple):
+            raise TypeError("sprite must be a tuple")
+        elif len(sprite) != 6:
+            raise ValueError("sprite lenght must be 6")
+        else:
+            self.__sprite = sprite
 
     def __str__(self) -> str:
         """

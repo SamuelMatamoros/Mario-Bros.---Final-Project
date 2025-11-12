@@ -1,3 +1,6 @@
+import settings
+
+
 class Conveyor:
     """
     Class to represent a conveyor belt in the game.
@@ -13,7 +16,7 @@ class Conveyor:
             The path or identifier for the conveyor's sprite image.
     """
 
-    def __init__(self, level: int, direction: str, speed: int):
+    def __init__(self, side: int, level: int, direction: str, speed: int):
         """
         This method is used to create Conveyor objects.
 
@@ -25,7 +28,7 @@ class Conveyor:
         self.level = level
         self.direction = direction
         self.speed = speed
-        self.sprite = "conveyor.png" # To be changed
+        self.sprite = settings.CONVEYOR_0  # To be changed
 
     # level property
     @property
@@ -60,22 +63,24 @@ class Conveyor:
             raise ValueError("Speed must be a positive integer")
         self.__speed = speed
 
-    # !!!!!!sprite property (i believe this is wrong and unnecesary it might be erased)!!!!!!
     @property
-    def sprite(self) -> str:
+    def sprite(self) -> tuple:
         return self.__sprite
 
     @sprite.setter
-    def sprite(self, sprite: str):
-        if not isinstance(sprite, str):
-            raise TypeError("sprite must be a string")
-        self.__sprite = sprite
+    def sprite(self, sprite: tuple):
+        if not isinstance(sprite, tuple):
+            raise TypeError("sprite must be a tuple")
+        elif len(sprite) != 6:
+            raise ValueError("sprite lenght must be 6")
+        else:
+            self.__sprite = sprite
 
     def __str__(self) -> str:
         """
         Return a human-readable string representation of the conveyor.
         """
-        return (f"Conveyor at level {self.level}, direction: {self.direction}, "
+        return (f"Conveyor at level {self.level}, direction: {self.direction},"
                 f"speed: {self.speed}, sprite: {self.sprite}")
 
     def __repr__(self) -> str:

@@ -22,6 +22,12 @@ class Board:
         pyxel.run(self.update, self.draw)
 
     # Properties and setters
+
+    """
+    Im not really shure this is what I want, i don't whant the dimensions to
+    be changed at any moment of the program. I need them to be read-only.
+    """
+
     @property
     def width(self) -> int:
         return self.__width
@@ -88,12 +94,9 @@ class Board:
         sprites of the game. """
 
         # Erasing the previous screen
-        pyxel.cls(13)  # Grey bg
-        pyxel.cls(0)   # Black bg
+        pyxel.cls(0)
 
-        self.tests(self)
-
-        # Drawing the background that doesn't change
+        # self.tests(self)
 
         # This creates the pipe in the middle
         for i in range(self.height//settings.TILE_DIMENSION):
@@ -101,11 +104,47 @@ class Board:
                       settings.TILE_DIMENSION * i,
                       *settings.PIPE_BIG)
 
-        # machine thingy at the bottom right corner
-        pyxel.blt(self.width - settings.TILE_DIMENSION,
-                  self.height - settings.TILE_DIMENSION,
+        # Drawing conveyors (must change latter)
+        for i in range(2, self.height//settings.TILE_DIMENSION - 1):
+
+            if i % 2 == 0:
+                pyxel.blt(4*settings.TILE_DIMENSION,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_0)
+                pyxel.blt(6*settings.TILE_DIMENSION,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_0)
+                pyxel.blt(3*settings.TILE_DIMENSION,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_LEFT_0)
+                pyxel.blt(7*settings.TILE_DIMENSION,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_RIGHT_0)
+            else:
+                pyxel.blt(3*settings.TILE_DIMENSION + 8,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_LEFT_0)
+                pyxel.blt(4*settings.TILE_DIMENSION + 8,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_0_HALF)
+                pyxel.blt(6*settings.TILE_DIMENSION,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_0_HALF)
+                pyxel.blt(7*settings.TILE_DIMENSION - 8,
+                          i * settings.TILE_DIMENSION,
+                          *settings.CONVEYOR_RIGHT_0)
+
+        pyxel.blt(10 * settings.TILE_DIMENSION - 8,
+                  6 * settings.TILE_DIMENSION,
+                  *settings.CONVEYOR_LEFT_0)
+        pyxel.blt(10 * settings.TILE_DIMENSION + 8,
+                  6 * settings.TILE_DIMENSION,
+                  *settings.CONVEYOR_0_HALF)
+        pyxel.blt(10 * settings.TILE_DIMENSION,
+                  7 * settings.TILE_DIMENSION,
                   *settings.MACHINE)
 
+        # Little Mario for reference
         pyxel.blt(3*self.width//4,
-                  self.height//4,
+                  3*self.height//4,
                   *settings.MARIO_DEF_RIGHT)
