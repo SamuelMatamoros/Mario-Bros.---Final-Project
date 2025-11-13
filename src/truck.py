@@ -1,6 +1,7 @@
 import config
 import pyxel
 
+
 class Truck:
     """
     Class for the truck, with a fixed head and a variable bed depending on cargo.
@@ -8,7 +9,7 @@ class Truck:
 
     def __init__(self):
         # Attributes
-        self.loaded_boxes = 0
+        self.number_of_packages = 0
 
         # Methods
         self.draw()
@@ -30,16 +31,21 @@ class Truck:
         """Draws the truck: fixed head, variable bed based on loaded_boxes."""
         # Draw truck head at fixed position (adjust x, y as needed)
         pyxel.blt(
-            12 * config.TILE_DIMENSION,
-            10 * config.TILE_DIMENSION,
+            8,
+            6 * config.TILE_DIMENSION,
             *config.TRUCK_HEAD
         )
         # Draw beds/cargo
-        for i in range(self.loaded_boxes):
-            bed_x = (12 + 1 + i) * config.TILE_DIMENSION  # Offset each bed after the head
-            pyxel.blt(
-                bed_x,
-                10 * config.TILE_DIMENSION,
-                *config.TRUCK_BED[i]
-            )
-
+        pyxel.blt(
+            8 + config.TILE_DIMENSION,
+            6 * config.TILE_DIMENSION,
+            *config.TRUCK_BED[self.number_of_packages]
+        )
+        # Draw structure arround
+        for i in range(6):
+            pyxel.blt(i * 8,
+                      6 * config.TILE_DIMENSION + 4,
+                      *config.HOR_HALF_PIPE)
+        pyxel.blt(2 * config.TILE_DIMENSION + 12,
+                  6 * config.TILE_DIMENSION,
+                  *config.VERT_PIPE)

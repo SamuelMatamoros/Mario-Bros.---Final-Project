@@ -16,13 +16,13 @@ HEIGHT = TILES_OF_HEIGHT * TILE_DIMENSION
 CHARACTERS = ["MARIO", "LUIGI", "BOSS"]
 
 # NAME = (img_bank, x_start, y_start, with, height, [colkey])
-MARIO_DEF_RIGHT = (0, 0, 0, 16, 16, 0)
-MARIO_PACKAGE = (0, 16, 0, 16, 16, 0)
-MARIO_LOOK_LEFT_SMEAR = (0, 32, 0, 16, 16, 0)
-MARIO_LOOK_LEFT = (0, 48, 0, 16, 16, 0)
-MARIO_REST = (0, 0, 16, 16, 16, 0)
-MARIO_DEF_LEFT = (0, 16, 16, 16, 16, 0)
-MARIO_REPRIMAND = (0, 40, 16, 16, 16, 0)
+MARIO_DEF_RIGHT = (0, 0, 0, 16, 16, 11)
+MARIO_PACKAGE = (0, 16, 0, 16, 16, 11)
+MARIO_LOOK_LEFT_SMEAR = (0, 32, 0, 16, 16, 11)
+MARIO_LOOK_LEFT = (0, 48, 0, 16, 16, 11)
+MARIO_REST = (0, 0, 16, 16, 16, 11)
+MARIO_DEF_LEFT = (0, 16, 16, 16, 16, 11)
+MARIO_REPRIMAND = (0, 40, 16, 16, 16, 11)
 
 LUIGI_DEF_LEFT = (0, 0, 32, 16, 16, 0)
 LUIGI_PACKAGE = (0, 16, 23, 16, 16, 0)
@@ -36,6 +36,7 @@ BOSS_ARMS_UP = (0, 0, 64, 16, 16, 0)
 BOSS_ARMS_DOWN = (0, 16, 64, 16, 16, 0)
 
 
+PACKAGE_STATES = ["CONVEYOR", "HANDLED", "BROKEN", "TRUCK"]
 PACKAGE_SPRITE = [
         (1, 0, 0, 16, 16, 0),
         (1, 16, 0, 16, 16, 0),
@@ -59,20 +60,29 @@ TRUCK_BED = [
 
 CONVEYOR_0 = [
         (1, 48, 80, 16, 16, 0),      # Conveyor left 0
-        6 * (1, 0, 96, 16, 16, 0),   # Conveyor 0
+        (1, 0, 96, 16, 16, 0),       # Conveyor 0
+        (1, 0, 96, 16, 16, 0),       # Conveyor 0
+        (1, 0, 96, 16, 16, 0),       # Conveyor 0
+        (1, 0, 96, 16, 16, 0),       # Conveyor 0
         (1, 32, 96, 16, 16, 0),      # Conveyor right 0
         ]
 
 CONVEYOR_1 = [
         (1, 16, 96, 16, 16, 0),      # Conveyor left 0
-        6 * (1, 32, 80, 16, 16, 0),  # Conveyor 0
+        (1, 32, 80, 16, 16, 0),      # Conveyor 0
+        (1, 32, 80, 16, 16, 0),      # Conveyor 0
+        (1, 32, 80, 16, 16, 0),      # Conveyor 0
+        (1, 32, 80, 16, 16, 0),      # Conveyor 0
         (1, 48, 96, 16, 16, 0),      # Conveyor right 0
         ]
 
 PIPE_BIG = (1, 32, 32, 16, 16, 0)
-MACHINE = (1, 48, 32, 16, 16, 0)
+MACHINE = (1, 64, 16, 32, 32, 0)
 DOOR = (1, 0, 80, 16, 16, 0)
-HOR_HALF_PIPE = (1, 0, 124, 8, 4, 0)
+
+
+HOR_HALF_PIPE = (1, 0, 112, 8, 16, 0)
 L_PIPE = (1, 16, 118, 10, 10, 0)
 VERT_PIPE = (1, 38, 112, 4, 16, 0)
+
 STAIR = (1, 48, 112, 16, 16, 0, 0)

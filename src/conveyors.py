@@ -61,16 +61,18 @@ class Conveyor:
         """
         if self.level == 0:
             for i in range(3):
-                pyxel.blt(13 * config.TILE_DIMENSION,
+                pyxel.blt((13 + i) * config.TILE_DIMENSION,
                           10 * config.TILE_DIMENSION,
                           *config.CONVEYOR_0[i])
         elif self.level % 2 == 0:  # Even conveyors
-            for i in config.CONVEYOR_0:
-                pyxel.blt(5 * config.TILE_DIMENSION + config.TILE_DIMENSION//2,
-                          config.TILES_OF_HEIGHT - self.level * config.TILE_DIMENSION,
-                          *config.CONVEYOR_0[i])
+            for i in range(len(config.CONVEYOR_0)):
+                pyxel.blt(
+                    (5 + i) * config.TILE_DIMENSION + config.TILE_DIMENSION//4,
+                    config.HEIGHT - (self.level + 1) * config.TILE_DIMENSION,
+                    *config.CONVEYOR_0[i])
         else:
-            for i in config.CONVEYOR_0:
-                pyxel.blt(5 * config.TILE_DIMENSION,
-                          config.TILES_OF_HEIGHT - self.level * config.TILE_DIMENSION,
-                          *config.CONVEYOR_0[i])
+            for i in range(len(config.CONVEYOR_0)):
+                pyxel.blt(
+                    (5 + i) * config.TILE_DIMENSION,
+                    config.HEIGHT - (self.level + 1) * config.TILE_DIMENSION,
+                    *config.CONVEYOR_0[i])

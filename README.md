@@ -54,14 +54,14 @@ Please be sure to have the requirements installed before you run any of the code
 
 ### Sprint 1: Objects and graphical interface
 
-- [ ] Create a class for each main game element: Characters, Conveyor, Truck, Package,
+- [x] Create a class for each main game element: Characters, Conveyor, Truck, Package,
 etc.
-- [ ] All the behavior logic of each entity must be contained in its corresponding class.
+- [x] All the behavior logic of each entity must be contained in its corresponding class.
 Avoid including game logic in the main program (penalty if it occurs).
-- [ ]  Design the graphical interface of the scenario: a single screen with the conveyor
+- [x]  Design the graphical interface of the scenario: a single screen with the conveyor
 belts, floors, stairs, and truck.
-- [ ] Implement a score counter and error counter (failures) visible during the game.
-- [ ] Define the basic data structures that will manage the state of the conveyor belts,
+- [x] Implement a score counter and error counter (failures) visible during the game.
+- [x] Define the basic data structures that will manage the state of the conveyor belts,
 packages in transit, and the difficulty level.
 
 ### Sprint 2: Mario and Luigi Movement

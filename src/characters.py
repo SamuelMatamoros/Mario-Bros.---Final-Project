@@ -54,6 +54,6 @@ class Character:
 
     def draw(self):
         """ Draw method """
-        pyxel.blt(12 * config.TILE_DIMENSION,
-                  10 * config.TILE_DIMENSION,
+        pyxel.blt(12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2,
+                  10 * config.TILE_DIMENSION + config.TILE_DIMENSION//4,
                   *config.MARIO_DEF_LEFT)
