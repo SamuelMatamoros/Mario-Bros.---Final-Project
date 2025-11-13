@@ -1,4 +1,5 @@
-import settings
+import config
+import pyxel
 
 
 class Conveyor:
@@ -16,7 +17,7 @@ class Conveyor:
             The path or identifier for the conveyor's sprite image.
     """
 
-    def __init__(self, side: int, level: int, direction: str, speed: int):
+    def __init__(self, level: int, speed: float):
         """
         This method is used to create Conveyor objects.
 
@@ -26,9 +27,10 @@ class Conveyor:
         :param sprite: str. Reference to the sprite for the conveyor.
         """
         self.level = level
-        self.direction = direction
-        self.speed = speed
-        self.sprite = settings.CONVEYOR_0  # To be changed
+        self.speed = float(speed)
+        self.packages = []
+
+        self.draw()
 
     # level property
     @property
@@ -37,51 +39,54 @@ class Conveyor:
 
     @level.setter
     def level(self, level: int):
-        if not isinstance(level, int) or level < 0:
-            raise ValueError("Level must be an int greater or equal to 0")
-        self.__level = level
-
-    # direction property
-    @property
-    def direction(self) -> str:
-        return self.__direction
-
-    @direction.setter
-    def direction(self, direction: str):
-        if direction not in ("odd", "even"):
-            raise ValueError('Direction must be "odd" or "even"')
-        self.__direction = direction
+        if not isinstance(level, int):
+            raise TypeError("Level must be an int greater or equal to 0")
+        elif level < 0:
+            raise ValueError("Level must be greater or equal to 0")
+        else:
+            self.__level = level
 
     # speed property
     @property
-    def speed(self) -> int:
+    def speed(self) -> float:
         return self.__speed
 
     @speed.setter
-    def speed(self, speed: int):
-        if not isinstance(speed, int) or speed <= 0:
-            raise ValueError("Speed must be a positive integer")
-        self.__speed = speed
-
-    @property
-    def sprite(self) -> tuple:
-        return self.__sprite
-
-    @sprite.setter
-    def sprite(self, sprite: tuple):
-        if not isinstance(sprite, tuple):
-            raise TypeError("sprite must be a tuple")
-        elif len(sprite) != 6:
-            raise ValueError("sprite lenght must be 6")
+    def speed(self, speed: float):
+        if not isinstance(speed, float):
+            raise ValueError("Speed must be float")
+        elif speed <= 0:
+            raise ValueError("Speed must be a positive float")
         else:
-            self.__sprite = sprite
+            self.__speed = speed
+
+    def draw(self):
+        """
+        Draw the conveyor
+        """
+        if self.level == 0:
+            for i in range(3):
+                pyxel.blt(13 * config.TILE_DIMENSION,
+                          10 * config.TILE_DIMENSION,
+                          *config.CONVEYOR_0[i])
+        elif self.level % 2 == 0:  # Even conveyors
+            for i in config.CONVEYOR_0:
+                pyxel.blt(5 * config.TILE_DIMENSION + config.TILE_DIMENSION//2,
+                          config.TILES_OF_HEIGHT - self.level * config.TILE_DIMENSION,
+                          *config.CONVEYOR_0[i])
+        else:
+            for i in config.CONVEYOR_0:
+                pyxel.blt(5 * config.TILE_DIMENSION,
+                          config.TILES_OF_HEIGHT - self.level * config.TILE_DIMENSION,
+                          *config.CONVEYOR_0[i])
 
     def __str__(self) -> str:
         """
         Return a human-readable string representation of the conveyor.
         """
-        return (f"Conveyor at level {self.level}, direction: {self.direction},"
-                f"speed: {self.speed}, sprite: {self.sprite}")
+        return ("Level", self.level,
+                "\nSpeed:", self.speed,
+                "\nPackages:", self.packages)
 
     def __repr__(self) -> str:
         """

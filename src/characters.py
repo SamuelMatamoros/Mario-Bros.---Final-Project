@@ -1,3 +1,7 @@
+import config
+import pyxel
+
+
 class Character:
     """
     Class to represent a game character (Mario or Luigi).
@@ -13,30 +17,20 @@ class Character:
             The path or identifier for the character's sprite image.
     """
 
-    def __init__(self, side: str, level: int, sprite: tuple):
+    def __init__(self, character: str):
         """
         This method is used to create Character objects.
 
-        :param name: str. Name of the character.
-        :param side: str. Either "left" or "right".
-        :param level: int. Platform number (1, 2, 3, 4).
-        :param sprite: str. Reference to the sprite for the character.
+        :param character: str. Name of the character.
         """
-        self.side = side
-        self.level = level
+
+        # Attributes
+        self.character = character.upper()
+        self.level = 0
         self.has_package = False
-        self.sprite = sprite
 
-    # side property
-    @property
-    def side(self) -> str:
-        return self.__side
-
-    @side.setter
-    def side(self, side: str):
-        if side not in ("left", "right"):
-            raise ValueError('Side must be "left" or "right"')
-        self.__side = side
+        # Methods
+        self.draw()
 
     # level property
     @property
@@ -45,8 +39,10 @@ class Character:
 
     @level.setter
     def level(self, level: int):
-        if not isinstance(level, int) or level < 1:
-            raise ValueError("Level must be an int greater than 0")
+        if not isinstance(level, int):
+            raise ValueError("Level must be an integer")
+        elif level < 0:
+            raise ValueError("Level must be greater or equal to 0")
         self.__level = level
 
     # has_package property
@@ -61,17 +57,24 @@ class Character:
         self.__has_package = has_package
 
     @property
-    def sprite(self) -> tuple:
-        return self.__sprite
+    def character(self) -> str:
+        return self.__character
 
-    @sprite.setter
-    def sprite(self, sprite: tuple):
-        if not isinstance(sprite, tuple):
-            raise TypeError("sprite must be a string")
-        elif len(sprite) != 6:
-            raise ValueError("sprite lenght must be 6")
+    @character.setter
+    def character(self, character: str):
+        if not isinstance(character, str):
+            raise TypeError("character must be a string")
+        elif character not in config.CHARACTERS:
+            raise ValueError("character must be one of:",
+                             str(config.CHARACTERS))
         else:
-            self.__sprite = sprite
+            self.__character = character
+
+    def draw(self):
+        """ Draw method """
+        pyxel.blt(12 * config.TILE_DIMENSION,
+                  10 * config.TILE_DIMENSION,
+                  *config.MARIO_DEF_LEFT)
 
     def __str__(self) -> str:
         """

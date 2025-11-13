@@ -6,15 +6,14 @@ This script contains all the constants for the game.
 
 TILE_DIMENSION = 16
 
-MAX_WIDTH = 14*TILE_DIMENSION
-MIN_WIDTH = 8*TILE_DIMENSION
-DEF_WIDTH = 11*TILE_DIMENSION
+TILES_OF_WIDTH = 16
+TILES_OF_HEIGHT = 12
+WIDTH = TILES_OF_WIDTH * TILE_DIMENSION
+HEIGHT = TILES_OF_HEIGHT * TILE_DIMENSION
 
-MAX_HEIGHT = 10*TILE_DIMENSION
-MIN_HEIGHT = 4*TILE_DIMENSION
-DEF_HEIGHT = 8*TILE_DIMENSION
+# Sprites & characters
 
-# Sprites
+CHARACTERS = ["MARIO", "LUIGI", "BOSS"]
 
 # NAME = (img_bank, x_start, y_start, with, height, [colkey])
 MARIO_DEF_RIGHT = (0, 0, 0, 16, 16, 0)
@@ -36,30 +35,39 @@ LUIGI_REPRIMAND = (0, 32, 48, 16, 16, 0)
 BOSS_ARMS_UP = (0, 0, 64, 16, 16, 0)
 BOSS_ARMS_DOWN = (0, 16, 64, 16, 16, 0)
 
-PACKAGE_1 = (1, 0, 0, 16, 16, 0)
-PACKAGE_2 = (1, 16, 0, 16, 16, 0)
-PACKAGE_3 = (1, 32, 0, 16, 16, 0)
-PACKAGE_4 = (1, 48, 0, 16, 16, 0)
-PACKAGE_5 = (1, 0, 16, 16, 16, 0)
+
+PACKAGE_SPRITE = [
+        (1, 0, 0, 16, 16, 0),
+        (1, 16, 0, 16, 16, 0),
+        (1, 32, 0, 16, 16, 0),
+        (1, 48, 0, 16, 16, 0),
+        (1, 0, 16, 16, 16, 0)
+        ]
 
 TRUCK_HEAD = (1, 0, 32, 16, 16, 0)
-TRUCK_BED_0 = (1, 16, 32, 16, 16, 0)
-TRUCK_BED_1 = (1, 0, 48, 16, 16, 0)
-TRUCK_BED_2 = (1, 16, 48, 16, 16, 0)
-TRUCK_BED_3 = (1, 32, 48, 16, 16, 0)
-TRUCK_BED_4 = (1, 48, 48, 16, 16, 0)
-TRUCK_BED_5 = (1, 0, 64, 16, 16, 0)
-TRUCK_BED_6 = (1, 16, 64, 16, 16, 0)
-TRUCK_BED_7 = (1, 32, 64, 16, 16, 0)
-TRUCK_BED_8 = (1, 48, 64, 16, 16, 0)
+TRUCK_BED = [
+        (1, 16, 32, 16, 16, 0),
+        (1, 0, 48, 16, 16, 0),
+        (1, 16, 48, 16, 16, 0),
+        (1, 32, 48, 16, 16, 0),
+        (1, 48, 48, 16, 16, 0),
+        (1, 0, 64, 16, 16, 0),
+        (1, 16, 64, 16, 16, 0),
+        (1, 32, 64, 16, 16, 0),
+        (1, 48, 64, 16, 16, 0)
+        ]
 
-CONVEYOR_LEFT_0 = (1, 48, 80, 16, 16, 0)
-CONVEYOR_LEFT_1 = (1, 32, 80, 16, 16, 0)
-CONVEYOR_RIGHT_0 = (1, 32, 96, 16, 16, 0)
-CONVEYOR_RIGHT_1 = (1, 48, 96, 16, 16, 0)
-CONVEYOR_0 = (1, 0, 96, 16, 16, 0)
-CONVEYOR_0_HALF = (1, 0, 96, 8, 16, 0)
-CONVEYOR_1_HALF = (1, 16, 96, 8, 16, 0)
+CONVEYOR_0 = [
+        (1, 48, 80, 16, 16, 0),      # Conveyor left 0
+        6 * (1, 0, 96, 16, 16, 0),   # Conveyor 0
+        (1, 32, 96, 16, 16, 0),      # Conveyor right 0
+        ]
+
+CONVEYOR_1 = [
+        (1, 16, 96, 16, 16, 0),      # Conveyor left 0
+        6 * (1, 32, 80, 16, 16, 0),  # Conveyor 0
+        (1, 48, 96, 16, 16, 0),      # Conveyor right 0
+        ]
 
 PIPE_BIG = (1, 32, 32, 16, 16, 0)
 MACHINE = (1, 48, 32, 16, 16, 0)
