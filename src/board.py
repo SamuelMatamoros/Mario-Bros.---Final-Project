@@ -1,7 +1,9 @@
 import pyxel
 import config
-from conveyors import Conveyor
 from characters import Character
+from conveyors import Conveyor
+from package import Package
+from truck import Truck
 
 
 class Board:
@@ -30,6 +32,9 @@ class Board:
 
     def difficulty0(self):
         self.number_of_conveyors = 5
+        self.conveyors = [
+                Conveyor(i, 1) for i in range(self.number_of_conveyors)
+                ]
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
@@ -67,5 +72,8 @@ class Board:
         self.draw_pipe()
 
         if self.difficulty == 0:
+            for conveyor in self.conveyors:
+                conveyor.draw()
+
             self.mario = Character("MARIO")
             self.mario.draw()

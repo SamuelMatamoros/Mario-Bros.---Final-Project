@@ -9,12 +9,8 @@ class Conveyor:
     Attributes:
         level : int
             The current level/platform the conveyor is on.
-        direction : str
-            The direction of movement on the conveyor, either "odd" or "even".
         speed : int
             The speed at which the conveyor moves packages.
-        sprite : str
-            The path or identifier for the conveyor's sprite image.
     """
 
     def __init__(self, level: int, speed: float):
@@ -24,7 +20,6 @@ class Conveyor:
         :param level: int. Platform number (e.g., 1, 2, 3) of the conveyor.
         :param direction: str. Direction of conveyor, either "left" or "right".
         :param speed: int. Speed at which the conveyor moves packages.
-        :param sprite: str. Reference to the sprite for the conveyor.
         """
         self.level = level
         self.speed = float(speed)
