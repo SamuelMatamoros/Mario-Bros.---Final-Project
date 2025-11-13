@@ -3,26 +3,8 @@ import pyxel
 
 
 class Character:
-    """
-    Class to represent a game character (Mario or Luigi).
-
-    Attributes:
-        side : str
-            The side of the conveyor the character is on ("left" or "right").
-        level : int
-            The current level/platform (e.g., 1, 2, 3).
-        has_package : bool
-            Whether the character is holding a package.
-        sprite : str
-            The path or identifier for the character's sprite image.
-    """
 
     def __init__(self, character: str):
-        """
-        This method is used to create Character objects.
-
-        :param character: str. Name of the character.
-        """
 
         # Attributes
         self.character = character.upper()
@@ -75,17 +57,3 @@ class Character:
         pyxel.blt(12 * config.TILE_DIMENSION,
                   10 * config.TILE_DIMENSION,
                   *config.MARIO_DEF_LEFT)
-
-    def __str__(self) -> str:
-        """
-        Return a human-readable string representation of the character.
-        """
-        return (f"side {self.side}\nlevel {self.level}"
-                f"has package? {self.has_package}"
-                f"sprite: {self.sprite}")
-
-    def __repr__(self) -> str:
-        """
-        Return a developer-friendly string representation of the character.
-        """
-        return self.__str__()

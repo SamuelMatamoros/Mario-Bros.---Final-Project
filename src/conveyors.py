@@ -79,17 +79,3 @@ class Conveyor:
                 pyxel.blt(5 * config.TILE_DIMENSION,
                           config.TILES_OF_HEIGHT - self.level * config.TILE_DIMENSION,
                           *config.CONVEYOR_0[i])
-
-    def __str__(self) -> str:
-        """
-        Return a human-readable string representation of the conveyor.
-        """
-        return ("Level", self.level,
-                "\nSpeed:", self.speed,
-                "\nPackages:", self.packages)
-
-    def __repr__(self) -> str:
-        """
-        Return a developer-friendly string representation of the conveyor.
-        """
-        return self.__str__()
