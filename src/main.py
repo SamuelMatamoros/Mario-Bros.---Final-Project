@@ -12,7 +12,7 @@ class Main:
     def __init__(self):
         pyxel.init(config.WIDTH,
                    config.HEIGHT,
-                   "Mario Bros.",
+                   title="Mario Bros.",
                    fps=60,
                    quit_key=pyxel.KEY_Q,
                    capture_scale=3,
