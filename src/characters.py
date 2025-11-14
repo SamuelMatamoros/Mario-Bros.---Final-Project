@@ -52,8 +52,34 @@ class Character:
         else:
             self.__character = character
 
+    def update(self, max_level):
+        """ Update method for character class """
+
+        if self.character == "MARIO":
+            up_key = pyxel.KEY_UP
+            down_key = pyxel.KEY_DOWN
+        if self.character == "LUIGI":
+            up_key = pyxel.KEY_W
+            down_key = pyxel.KEY_S
+
+        if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
+            self.level += 1
+            print(max_level//2, self.level)
+        if pyxel.btnp(down_key) and 0 < self.level:
+            self.level -= 1
+            print(self.level)
+
     def draw(self):
         """ Draw method """
-        pyxel.blt(12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2,
-                  10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2,
-                  *config.MARIO_DEF_RIGHT)
+        if self.character == "MARIO":
+            x = 12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2
+            y = 10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2
+            sprite = config.MARIO_DEF_RIGHT
+        elif self.character == "LUIGI":
+            x = 4 * config.TILE_DIMENSION
+            y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2
+            sprite = config.LUIGI_DEF_LEFT
+        else:
+            sprite = config.BOSS_ARMS_DOWN
+
+        pyxel.blt(x, y - 2*self.level*config.TILE_DIMENSION, *sprite)

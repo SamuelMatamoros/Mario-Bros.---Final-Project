@@ -20,7 +20,7 @@ class Board:
         self.fails = 0
 
         self.mario = Character("MARIO")
-        # self.luigi = Character("LUIGI")
+        self.luigi = Character("LUIGI")
         # self.boss = Character("BOSS")
 
         self.truck = Truck()
@@ -170,12 +170,18 @@ class Board:
 
     def update(self):
         # To exit the game
+        if self.difficulty == 0:
+            self.difficulty0()
+
+        self.mario.update(self.number_of_conveyors)
+        self.luigi.update(self.number_of_conveyors)
+
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
 
     def draw(self):
 
-        # self.tests(self)
+        self.tests(self)
 
         if self.difficulty == 0:
             self.difficulty0()
@@ -183,17 +189,15 @@ class Board:
                 conveyor.draw()
             self.draw_platforms(self.number_of_conveyors)
 
-            self.truck.draw()
-            self.mario.draw()
-
         elif self.difficulty == 1:
             self.difficulty1()
             for conveyor in self.conveyors:
                 conveyor.draw()
             self.draw_platforms(self.number_of_conveyors)
 
-            self.truck.draw()
-            self.mario.draw()
+        self.truck.draw()
+        self.mario.draw()
+        self.luigi.draw()
 
         self.draw_pipe()
         self.draw_machine()
