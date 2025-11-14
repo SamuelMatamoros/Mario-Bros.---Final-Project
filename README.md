@@ -66,12 +66,12 @@ packages in transit, and the difficulty level.
 
 ### Sprint 2: Mario and Luigi Movement
 
-- [ ] Implement the vertical movement control of the characters:
-    - [ ] Mario: Arrow Up / Arrow Down keys.
-    - [ ] Luigi: W / S keys.
-- [ ] Each character must be able to go up and down floors using the stairs, respecting
+- [x] Implement the vertical movement control of the characters:
+    - [x] Mario: Arrow Up / Arrow Down keys.
+    - [x] Luigi: W / S keys.
+- [x] Each character must be able to go up and down floors using the stairs, respecting
 the upper and lower limits.
-- [ ] Graphically display the current position of each character (Floor0, Floor1, etc.) on
+- [x] Graphically display the current position of each character (Floor0, Floor1, etc.) on
 the screen.
 
 ### Sprint 3: Packages movement

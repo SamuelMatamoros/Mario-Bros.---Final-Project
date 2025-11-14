@@ -64,10 +64,8 @@ class Character:
 
         if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
             self.level += 1
-            print(max_level//2, self.level)
         if pyxel.btnp(down_key) and 0 < self.level:
             self.level -= 1
-            print(self.level)
 
     def draw(self):
         """ Draw method """
@@ -78,7 +76,7 @@ class Character:
         elif self.character == "LUIGI":
             x = 4 * config.TILE_DIMENSION
             y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2
-            sprite = config.LUIGI_DEF_LEFT
+            sprite = config.LUIGI_DEF_RIGHT
         else:
             sprite = config.BOSS_ARMS_DOWN
 

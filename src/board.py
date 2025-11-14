@@ -98,17 +98,22 @@ class Board:
         self.points_for_package = 50
 
     @staticmethod
-    def tests(self):
+    def tests(self, dim=False, level=False, tiles=False):
         # tests
-        pyxel.text(32, 16, f"Width: {config.WIDTH}", 7)
-        pyxel.text(32, 32, f"Height: {config.HEIGHT}", 7)
+        if dim:
+            pyxel.text(32, 16, f"Width: {config.WIDTH}", 7)
+            pyxel.text(32, 32, f"Height: {config.HEIGHT}", 7)
+
+        if level:
+            pyxel.text(196, 32, f"Mario level: {self.mario.level}", 7)
+            pyxel.text(196, 48, f"Luigi level: {self.luigi.level}", 7)
 
         # visualizer for tiles
-        # horizontal
-        for i in range(config.TILES_OF_WIDTH):
-            pyxel.rect(config.TILE_DIMENSION*i, 0, 16, 16, i)
-        for i in range(config.TILES_OF_HEIGHT):
-            pyxel.rect(0, config.TILE_DIMENSION*i, 16, 16, i)
+        if tiles:
+            for i in range(config.TILES_OF_WIDTH):
+                pyxel.rect(config.TILE_DIMENSION*i, 0, 16, 16, i)
+            for i in range(config.TILES_OF_HEIGHT):
+                pyxel.rect(0, config.TILE_DIMENSION*i, 16, 16, i)
 
     @staticmethod
     def draw_pipe():
@@ -181,7 +186,7 @@ class Board:
 
     def draw(self):
 
-        self.tests(self)
+        self.tests(self, level=True)
 
         if self.difficulty == 0:
             self.difficulty0()
