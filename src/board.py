@@ -28,7 +28,7 @@ class Board:
         # Public Methods
         # self.menu_screen()
         self.difficulty0()
-        # self.difficulty1()
+        self.difficulty1()
         # self.difficulty2()
         # self.difficulty3()
         self.update()
@@ -88,6 +88,15 @@ class Board:
         self.number_of_packages = 1
         self.points_for_package = 50
 
+    def difficulty1(self):
+        self.number_of_conveyors = 7 + 1  # The one represents the conveyor 0
+        self.conveyors = [
+                Conveyor(i, 1) for i in range(self.number_of_conveyors)
+                ]
+        self.packages = []
+        self.number_of_packages = 1
+        self.points_for_package = 50
+
     @staticmethod
     def tests(self):
         # tests
@@ -118,6 +127,28 @@ class Board:
                   config.HEIGHT - 3*config.TILE_DIMENSION,
                   *config.DOOR)
 
+    @staticmethod
+    def draw_platforms(level):
+        for i in range(level):
+            if i % 2 == 0:  # Even platforms for mario
+                pyxel.blt(config.WIDTH - 4.5*config.TILE_DIMENSION,
+                          config.HEIGHT - (i+0.25)*config.TILE_DIMENSION,
+                          *config.STAIR)
+                for j in range(3):
+                    pyxel.blt(
+                        config.WIDTH - (3.5 + j*0.5)*config.TILE_DIMENSION,
+                        config.HEIGHT - (i+1.25)*config.TILE_DIMENSION,
+                        *config.HOR_HALF_PIPE)
+            else:
+                pyxel.blt(4*config.TILE_DIMENSION,
+                          config.HEIGHT - (i+0.25)*config.TILE_DIMENSION,
+                          *config.STAIR)
+                for j in range(3):
+                    pyxel.blt(
+                        (3.5 + j*0.5)*config.TILE_DIMENSION,
+                        config.HEIGHT - (i+1.25)*config.TILE_DIMENSION,
+                        *config.HOR_HALF_PIPE)
+
     def top_menu(self):
         # This creates the menu at the top with Exit, score, fails and menu
         text_y = 9
@@ -147,27 +178,19 @@ class Board:
         # self.tests(self)
 
         if self.difficulty == 0:
+            self.difficulty0()
             for conveyor in self.conveyors:
                 conveyor.draw()
-            for i in range(self.number_of_conveyors):
-                if i % 2 == 0:  # Even platforms for mario
-                    pyxel.blt(config.WIDTH - 4.5*config.TILE_DIMENSION,
-                              config.HEIGHT - (i+0.5)*config.TILE_DIMENSION,
-                              *config.STAIR)
-                    for j in range(3):
-                        pyxel.blt(
-                            config.WIDTH - (3.5 + j*0.5)*config.TILE_DIMENSION,
-                            config.HEIGHT - (i+1.5)*config.TILE_DIMENSION,
-                            *config.HOR_HALF_PIPE)
-                else:
-                    pyxel.blt(4*config.TILE_DIMENSION,
-                              config.HEIGHT - (i+0.5)*config.TILE_DIMENSION,
-                              *config.STAIR)
-                    for j in range(3):
-                        pyxel.blt(
-                            (3.5 + j*0.5)*config.TILE_DIMENSION,
-                            config.HEIGHT - (i+1.5)*config.TILE_DIMENSION,
-                            *config.HOR_HALF_PIPE)
+            self.draw_platforms(self.number_of_conveyors)
+
+            self.truck.draw()
+            self.mario.draw()
+
+        elif self.difficulty == 1:
+            self.difficulty1()
+            for conveyor in self.conveyors:
+                conveyor.draw()
+            self.draw_platforms(self.number_of_conveyors)
 
             self.truck.draw()
             self.mario.draw()

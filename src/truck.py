@@ -42,10 +42,10 @@ class Truck:
             *config.TRUCK_BED[self.number_of_packages]
         )
         # Draw structure arround
-        for i in range(6):
+        for i in range(5):
             pyxel.blt(i * 8,
                       6 * config.TILE_DIMENSION + 4,
                       *config.HOR_HALF_PIPE)
-        pyxel.blt(2 * config.TILE_DIMENSION + 12,
-                  6 * config.TILE_DIMENSION,
-                  *config.VERT_PIPE)
+        pyxel.blt(5 * 8,
+                  6 * config.TILE_DIMENSION + 4,
+                  *config.L_PIPE)
