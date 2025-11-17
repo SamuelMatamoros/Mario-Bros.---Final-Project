@@ -26,14 +26,21 @@ class Main:
         """
         Update method for main class
         """
-        self.board.update()
+        self.board.menu_update()
+
+        if not self.board.menu_active:
+            self.board.update()
 
     def draw(self):
         """
         Draw method for main class
         """
         pyxel.cls(0)
+
         self.board.draw()
+
+        if self.board.menu_active:
+            self.board.menu_draw()
 
 
 Main()
