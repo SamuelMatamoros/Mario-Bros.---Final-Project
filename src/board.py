@@ -96,7 +96,9 @@ class Board:
                 self.__menu_selected += 1
             if pyxel.btnp(pyxel.KEY_RETURN):
                 self.difficulty = self.__menu_selected
-                self.__menu_selected = 0
+                # The line below resets the position of the menu after
+                # confirming the difficulty
+                # self.__menu_selected = 0
                 self.menu_active = False
 
     def menu_draw(self):
@@ -115,6 +117,8 @@ class Board:
 
         pyxel.text(36, 36, "CLOSE: (M)", 3)
         pyxel.text(config.WIDTH/2 - 8, 36, "MENU", 3)
+        pyxel.text(config.WIDTH - 6*config.TILE_DIMENSION, 36,
+                   "CONFIRM: (ENTER)", 3)
 
         for i in range(4):
             if i == self.__menu_selected:
