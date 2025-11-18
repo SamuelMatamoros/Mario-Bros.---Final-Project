@@ -26,7 +26,6 @@ class Board:
         self.luigi = Character("LUIGI")
 
         self.truck = Truck()
-        self.test_package = Package("CONVEYOR")
 
         # Public Methods
         # self.menu_screen()
@@ -189,6 +188,10 @@ class Board:
         self.number_of_packages = 1
         self.points_for_package = 50
 
+        for i in range(self.number_of_packages):
+            self.packages.append(Package("CONVEYOR"))
+            print("Package ongoing!")
+
     def difficulty1(self):
         self.number_of_conveyors = 7 + 1  # The one represents the conveyor 0
         self.conveyors = [
@@ -293,7 +296,9 @@ class Board:
             package.update()
 
         for package in self.packages:
-            package.update()
+            if pyxel.frame_count % 60 == 0:
+                package.update()
+                pyxel.flip()  # Flip to prevent updating 2 times
 
         self.mario.update(self.number_of_conveyors)
         self.luigi.update(self.number_of_conveyors)
@@ -303,12 +308,7 @@ class Board:
 
     def draw(self):
 
-        # self.tests(self, difficulty=True)
-
-        if self.difficulty == 0:
-            self.difficulty0()
-        elif self.difficulty == 1:
-            self.difficulty1()
+        # self.tests(self, tiles=True)
 
         for conveyor in self.conveyors:
             conveyor.draw()

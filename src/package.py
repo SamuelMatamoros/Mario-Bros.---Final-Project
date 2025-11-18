@@ -16,9 +16,10 @@ class Package:
 
     def __init__(self, state: str = "in_conveyor"):
         # Attributes
-        self.x = config.WIDTH - 1.5*config.TILE_DIMENSION
-        self.y = config.HEIGHT - 1*config.TILE_DIMENSION - 4
         self.level = 0              # initial level set to 0
+        self.tick = 0
+        self.x = config.WIDTH - 1.5*config.TILE_DIMENSION - self.tick*config.TILE_DIMENSION
+        self.y = config.HEIGHT - 2*config.TILE_DIMENSION - 4 - self.level*config.TILE_DIMENSION
         self.state = state
 
         # Methods
