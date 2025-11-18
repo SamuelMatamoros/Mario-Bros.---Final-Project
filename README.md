@@ -115,6 +115,11 @@ rule table:
 - [ ] Add optional sound effects: conveyor belt movement, error sounds, etc.
 - [ ] Implement high score tables or local competitive mode
 
+### Extra functionality (ultra optional)
+
+- [ ] Incorporate welcoming screen/start menu
+    (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play)
+
 ## Sources and relevant links
 
 - https://www.python.org/
