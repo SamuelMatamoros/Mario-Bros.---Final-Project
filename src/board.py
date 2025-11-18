@@ -24,18 +24,19 @@ class Board:
         # self.boss = Character("BOSS")
 
         self.truck = Truck()
+        self.test_package = Package("CONVEYOR")
 
         # Public Methods
         # self.menu_screen()
-        self.difficulty0()
-        self.difficulty1()
+        # self.difficulty0()
+        # self.difficulty1()
         # self.difficulty2()
         # self.difficulty3()
-        self.update()
-        self.draw()
+        # self.update()
+        # self.draw()
 
         # Private Methods
-        self.top_menu()
+        # self.top_menu()
 
     @property
     def difficulty(self):
@@ -178,6 +179,9 @@ class Board:
         if self.difficulty == 0:
             self.difficulty0()
 
+        for package in self.packages:
+            package.update()
+
         self.mario.update(self.number_of_conveyors)
         self.luigi.update(self.number_of_conveyors)
 
@@ -186,19 +190,20 @@ class Board:
 
     def draw(self):
 
-        self.tests(self, level=True)
+        # self.tests(self, level=True)
 
         if self.difficulty == 0:
             self.difficulty0()
-            for conveyor in self.conveyors:
-                conveyor.draw()
-            self.draw_platforms(self.number_of_conveyors)
-
         elif self.difficulty == 1:
             self.difficulty1()
-            for conveyor in self.conveyors:
-                conveyor.draw()
-            self.draw_platforms(self.number_of_conveyors)
+
+        for conveyor in self.conveyors:
+            conveyor.draw()
+
+        for package in self.packages:
+            package.draw()
+
+        self.draw_platforms(self.number_of_conveyors)
 
         self.truck.draw(self.number_of_conveyors)
 

@@ -50,6 +50,11 @@ class Package:
             raise ValueError(f"state must be one of: {config.PACKAGE_STATES}")
         self.__state = state
 
+    def update(self):
+        """
+        update method for package class
+        """
+
     def draw(self):
         if self.state == "CONVEYOR":
             sprite = config.PACKAGE_SPRITE[self.level]
