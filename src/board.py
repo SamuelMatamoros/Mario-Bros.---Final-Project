@@ -200,7 +200,8 @@ class Board:
                 conveyor.draw()
             self.draw_platforms(self.number_of_conveyors)
 
-        self.truck.draw()
+        self.truck.draw(self.number_of_conveyors)
+
         self.mario.draw()
         self.luigi.draw()
 
