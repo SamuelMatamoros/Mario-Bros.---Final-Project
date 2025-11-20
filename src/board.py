@@ -294,12 +294,25 @@ class Board:
 
         for package in self.packages:
             package.update()
+            if package.at_the_end():
+                if package.level % 2 == 0:
+                    if package.level == self.mario.level * 2:
+                        package.move_to_next_conveyor()
+                    else:
+                        package.state = "BROKEN"
+                else:
+                    if package.level == self.luigi.level * 2 + 1:
+                        package.move_to_next_conveyor()
+                    else:
+                        package.state = "BROKEN"
 
-        for package in self.packages:
-            if pyxel.frame_count % 60 == 0:
-                package.update()
-                pyxel.flip()  # Flip to prevent updating 2 times
+        pyxel.flip()
 
+        # for package in self.packages:
+        #     if pyxel.frame_count % 60 == 0:
+        #         package.update()
+        #         pyxel.flip()  # Flip to prevent updating 2 times
+        #
         self.mario.update(self.number_of_conveyors)
         self.luigi.update(self.number_of_conveyors)
 
@@ -308,7 +321,7 @@ class Board:
 
     def draw(self):
 
-        # self.tests(self, tiles=True)
+        self.tests(self, tiles=True, level=True)
 
         for conveyor in self.conveyors:
             conveyor.draw()

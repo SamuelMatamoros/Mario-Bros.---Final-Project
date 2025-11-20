@@ -17,13 +17,14 @@ class Package:
     def __init__(self, state: str = "in_conveyor"):
         # Attributes
         self.level = 0              # initial level set to 0
-        self.tick = 0
-        self.x = config.WIDTH - 1.5*config.TILE_DIMENSION - self.tick*config.TILE_DIMENSION
-        self.y = config.HEIGHT - 2*config.TILE_DIMENSION - 4 - self.level*config.TILE_DIMENSION
+        self.x = config.WIDTH - 1*config.TILE_DIMENSION
+        self.y = config.HEIGHT - 2*config.TILE_DIMENSION - 4
+        self.speed = 1
         self.state = state
 
-        # Methods
-        self.draw()
+        self.__x_tick = 0
+        self.__y_tick = -1
+        self.__at_the_end = False
 
     # level property
     @property
@@ -38,6 +39,21 @@ class Package:
             raise ValueError("level must be beetwen 0 and 6")
         self.__level = level
 
+    # speed property
+    @property
+    def speed(self):
+        """The speed property."""
+        return self._speed
+
+    @speed.setter
+    def speed(self, value):
+        if not isinstance(value, int):
+            raise TypeError("'speed' must be an integer")
+        elif value < 0 or value > 2:
+            return ValueError("'speed' must be beetwen 0.5 and 2")
+        else:
+            self._speed = value
+
     # state property
     @property
     def state(self) -> str:
@@ -51,19 +67,61 @@ class Package:
             raise ValueError(f"state must be one of: {config.PACKAGE_STATES}")
         self.__state = state
 
+    def at_the_end(self):
+        return self.__at_the_end
+
+    def move_to_next_conveyor(self):
+
+        self.__at_the_end = False
+
+        self.__y_tick += 1
+        if self.level != 0:
+            self.y -= config.TILE_DIMENSION
+
+        self.level += 1
+        self.__x_tick = 0
+
+        if self.level % 2 == 0:
+            self.x = 5 * config.TILE_DIMENSION + 8
+        else:
+            self.x = 10 * config.TILE_DIMENSION + 8
+
     def update(self):
         """
         update method for package class
         """
+        frames = 120 - 60 * self.speed
+
+        if pyxel.frame_count % frames == 0:
+
+            if self.level == 0:
+                if self.__x_tick < 3:
+                    self.x -= config.TILE_DIMENSION
+                    self.__x_tick += 1
+                else:
+                    self.__at_the_end = True
+            elif self.level % 2 == 0:
+                if self.__x_tick < 6:
+                    self.x += config.TILE_DIMENSION
+                    self.__x_tick += 1
+                else:
+                    self.__at_the_end = True
+            else:
+                if self.__x_tick < 6:
+                    self.x -= config.TILE_DIMENSION
+                    self.__x_tick += 1
+                else:
+                    self.__at_the_end = True
 
     def draw(self):
-        if self.state == "CONVEYOR":
-            sprite = config.PACKAGE_SPRITE[self.level]
-        elif self.state == "HANDLED":
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
-        elif self.state == "BROKEN":
-            sprite = config.PACKAGE_SPRITE[self.level]
-        else:
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
+        # if self.state == "CONVEYOR":
+        #     sprite = config.PACKAGE_SPRITE[self.level]
+        # elif self.state == "HANDLED":
+        #     sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
+        # elif self.state == "BROKEN":
+        #     sprite = config.PACKAGE_SPRITE[self.level]
+        # else:
+        #     sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
 
+        sprite = config.PACKAGE_SPRITE[0]
         pyxel.blt(self.x, self.y, *sprite)
