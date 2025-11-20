@@ -306,7 +306,7 @@ class Board:
                     else:
                         package.state = "BROKEN"
 
-        pyxel.flip()
+        # pyxel.flip()
 
         # for package in self.packages:
         #     if pyxel.frame_count % 60 == 0:
