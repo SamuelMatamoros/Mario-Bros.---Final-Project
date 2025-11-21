@@ -71,13 +71,14 @@ class Character:
         """ Draw method """
         if self.character == "MARIO":
             x = 12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2
-            y = 10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2
-            sprite = config.MARIO_DEF_RIGHT
+            y = 10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
+            sprite = config.MARIO_DEF_LEFT
         elif self.character == "LUIGI":
-            x = 4 * config.TILE_DIMENSION
-            y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2
+            x = 4 * config.TILE_DIMENSION - config.TILE_DIMENSION//4
+            y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
             sprite = config.LUIGI_DEF_RIGHT
         else:
             sprite = config.BOSS_ARMS_DOWN
 
-        pyxel.blt(x, y - 2*self.level*config.TILE_DIMENSION, *sprite)
+        pyxel.blt(x, y - 2*self.level*config.TILE_DIMENSION,
+                  *sprite, scale=1.3)

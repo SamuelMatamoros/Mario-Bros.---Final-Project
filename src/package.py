@@ -82,7 +82,7 @@ class Package:
         self.__x_tick = 0
 
         if self.level % 2 == 0:
-            self.x = 5 * config.TILE_DIMENSION + 8
+            self.x = 4.5 * config.TILE_DIMENSION + 8
         else:
             self.x = 10 * config.TILE_DIMENSION + 8
 
@@ -95,8 +95,8 @@ class Package:
         if pyxel.frame_count % frames == 0:
 
             if self.level == 0:
-                if self.__x_tick < 3:
-                    self.x -= config.TILE_DIMENSION
+                if self.__x_tick < 4:
+                    self.x -= config.TILE_DIMENSION//2
                     self.__x_tick += 1
                 else:
                     self.__at_the_end = True
@@ -114,14 +114,17 @@ class Package:
                     self.__at_the_end = True
 
     def draw(self):
-        # if self.state == "CONVEYOR":
-        #     sprite = config.PACKAGE_SPRITE[self.level]
-        # elif self.state == "HANDLED":
-        #     sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
-        # elif self.state == "BROKEN":
-        #     sprite = config.PACKAGE_SPRITE[self.level]
-        # else:
-        #     sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
 
-        sprite = config.PACKAGE_SPRITE[0]
+        if self.state == "CONVEYOR":
+            # sprite = config.PACKAGE_SPRITE[self.level]
+            sprite = config.PACKAGE_SPRITE[0]
+        elif self.state == "HANDLED":
+            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
+        elif self.state == "BROKEN":
+            # sprite = config.PACKAGE_SPRITE[self.level]
+            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
+        else:
+            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
+
+        # sprite = config.PACKAGE_SPRITE[0]
         pyxel.blt(self.x, self.y, *sprite)

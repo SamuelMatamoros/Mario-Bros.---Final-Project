@@ -271,21 +271,21 @@ class Board:
         for i in range(level):
             if i % 2 == 0:  # Even platforms for mario
                 pyxel.blt(config.WIDTH - 4.5*config.TILE_DIMENSION,
-                          config.HEIGHT - (i+0.25)*config.TILE_DIMENSION,
+                          config.HEIGHT - (i)*config.TILE_DIMENSION,
                           *config.STAIR)
                 for j in range(3):
                     pyxel.blt(
                         config.WIDTH - (3.5 + j*0.5)*config.TILE_DIMENSION,
-                        config.HEIGHT - (i+1.25)*config.TILE_DIMENSION,
+                        config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
             else:
-                pyxel.blt(4*config.TILE_DIMENSION,
-                          config.HEIGHT - (i+0.25)*config.TILE_DIMENSION,
+                pyxel.blt(4*config.TILE_DIMENSION - config.TILE_DIMENSION//4,
+                          config.HEIGHT - (i)*config.TILE_DIMENSION,
                           *config.STAIR)
                 for j in range(3):
                     pyxel.blt(
-                        (3.5 + j*0.5)*config.TILE_DIMENSION,
-                        config.HEIGHT - (i+1.25)*config.TILE_DIMENSION,
+                        (3.25 + j*0.5)*config.TILE_DIMENSION,
+                        config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
 
     def update(self):
@@ -293,7 +293,9 @@ class Board:
         self.__check_difficulty(self)
 
         for package in self.packages:
+
             package.update()
+
             if package.at_the_end():
                 if package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
@@ -306,13 +308,6 @@ class Board:
                     else:
                         package.state = "BROKEN"
 
-        # pyxel.flip()
-
-        # for package in self.packages:
-        #     if pyxel.frame_count % 60 == 0:
-        #         package.update()
-        #         pyxel.flip()  # Flip to prevent updating 2 times
-        #
         self.mario.update(self.number_of_conveyors)
         self.luigi.update(self.number_of_conveyors)
 
@@ -321,7 +316,7 @@ class Board:
 
     def draw(self):
 
-        self.tests(self, tiles=True, level=True)
+        # self.tests(self, tiles=True, level=True)
 
         for conveyor in self.conveyors:
             conveyor.draw()
