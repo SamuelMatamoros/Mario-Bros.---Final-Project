@@ -1,3 +1,4 @@
+import random
 import pyxel
 import config
 from characters import Character
@@ -17,8 +18,10 @@ class Board:
         # Attributes
         self.difficulty = 0
         self.__previous_difficulty = -1
+
         self.score = 0
         self.fails = 0
+
         self.menu_active = False
         self.__menu_selected = self.difficulty
 
@@ -27,21 +30,10 @@ class Board:
 
         self.truck = Truck()
 
-        # Public Methods
-        # self.menu_screen()
-        # self.difficulty0()
-        # self.difficulty1()
-        # self.difficulty2()
-        # self.difficulty3()
-        # self.update()
-        # self.draw()
-
-        # Private Methods
-        # self.top_menu()
-
     """
     PROPERTIES AND SETTERS SECTION
     """
+
     @property
     def difficulty(self):
         """The difficulty property."""
@@ -181,6 +173,7 @@ class Board:
 
     def difficulty0(self):
         self.number_of_conveyors = 5 + 1  # The one represents the conveyor 0
+        self.conveyor_speed = 1
         self.conveyors = [
                 Conveyor(i, 1) for i in range(self.number_of_conveyors)
                 ]
@@ -190,32 +183,51 @@ class Board:
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
-            print("Package ongoing!")
 
     def difficulty1(self):
         self.number_of_conveyors = 7 + 1  # The one represents the conveyor 0
-        self.conveyors = [
-                Conveyor(i, 1) for i in range(self.number_of_conveyors)
-                ]
+        for i in range(self.number_of_conveyors):
+            if i == 0:
+                self.conveyor_speed = 1
+            elif i % 2 == 0:
+                self.conveyor_speed = 1
+            else:
+                self.conveyor_speed = 1.5
+
+            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
 
     def difficulty2(self):
         self.number_of_conveyors = 9 + 1  # The one represents the conveyor 0
-        self.conveyors = [
-                Conveyor(i, 1) for i in range(self.number_of_conveyors)
-                ]
+        for i in range(self.number_of_conveyors):
+            if i == 0:
+                self.conveyor_speed = 1
+            elif i % 2 == 0:
+                self.conveyor_speed = 1.5
+            else:
+                self.conveyor_speed = 2
+
+            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
 
     def difficulty3(self):
         self.number_of_conveyors = 5 + 1  # The one represents the conveyor 0
-        self.conveyors = [
-                Conveyor(i, 1) for i in range(self.number_of_conveyors)
-                ]
+        for i in range(self.number_of_conveyors):
+            if i == 0:
+                self.conveyor_speed = 1
+            else:
+                self.conveyor_speed = 1 + random.randint(1, 3)//2
+
+            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+
         self.packages = []
+
         self.number_of_packages = 1
         self.points_for_package = 50
 
@@ -292,11 +304,18 @@ class Board:
 
         self.__check_difficulty(self)
 
-        for package in self.packages:
+        self.mario.update(self.number_of_conveyors)
+        self.luigi.update(self.number_of_conveyors)
 
+        for package in self.packages:
             package.update()
 
             if package.at_the_end():
+                print(package.level)
+                if package.level == self.number_of_conveyors - 1:
+                    print("success")
+                    self.truck.number_of_packages += 1
+                    self.packages.remove(package)
                 if package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
@@ -307,12 +326,8 @@ class Board:
                         package.move_to_next_conveyor()
                     else:
                         package.state = "BROKEN"
-
-        self.mario.update(self.number_of_conveyors)
-        self.luigi.update(self.number_of_conveyors)
-
-        if pyxel.btnp(pyxel.KEY_Q):
-            pyxel.quit()
+                        if self.score < 3:
+                            self.score += 1
 
     def draw(self):
 

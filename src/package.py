@@ -90,7 +90,8 @@ class Package:
         """
         update method for package class
         """
-        frames = 120 - 60 * self.speed
+
+        frames = 90 - 30 * self.speed
 
         if pyxel.frame_count % frames == 0:
 

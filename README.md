@@ -76,16 +76,16 @@ the screen.
 
 ### Sprint 3: Packages movement
 
-- [ ] Implement the package flow on the conveyor belts according to the established rules:
-    - [ ] Conveyor0 generates empty boxes for Mario.
-    - [ ] Even Conveyors → controlled by Mario.
-    - [ ] Odd Conveyors → controlled by Luigi.
+- [x] Implement the package flow on the conveyor belts according to the established rules:
+    - [x] Conveyor0 generates empty boxes for Mario.
+    - [x] Even Conveyors → controlled by Mario.
+    - [x] Odd Conveyors → controlled by Luigi.
 - [ ] Graphical representation of the packages must change according to the belt they are
 on.
 - [ ] When a package reaches the end of a conveyor belt:
-	- [ ] If the corresponding character is on the correct floor, they automatically pick
+	- [x] If the corresponding character is on the correct floor, they automatically pick
 it up and pass it to the next conveyor belt.
-	- [ ] If not, the package falls and a failure is recorded.
+	- [x] If not, the package falls and a failure is recorded.
 - [ ] Implement the automatic movement of packages based on the speed of the
 current level.
 

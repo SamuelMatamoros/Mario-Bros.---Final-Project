@@ -72,7 +72,10 @@ class Character:
         if self.character == "MARIO":
             x = 12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2
             y = 10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
-            sprite = config.MARIO_DEF_LEFT
+            if self.level == 0:
+                sprite = config.MARIO_DEF_RIGHT
+            else:
+                sprite = config.MARIO_DEF_LEFT
         elif self.character == "LUIGI":
             x = 4 * config.TILE_DIMENSION - config.TILE_DIMENSION//4
             y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
