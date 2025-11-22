@@ -84,6 +84,7 @@ the screen.
 on.
 - [ ] When a package reaches the end of a conveyor belt:
 	- [x] If the corresponding character is on the correct floor, they automatically pick
+        - [ ] \(_Extra:_\) change the sprite of Mario or Luigi.
 it up and pass it to the next conveyor belt.
 	- [x] If not, the package falls and a failure is recorded.
 - [ ] Implement the automatic movement of packages based on the speed of the

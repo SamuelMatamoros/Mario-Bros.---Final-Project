@@ -132,7 +132,7 @@ class Board:
                        col)
 
     def top_menu(self):
-        # This creates the menu at the top with Exit, score, fails and menu
+        # This creates the menu at the top with Exit, fails, fails and menu
         text_y = 9
         text_col = 7
 
@@ -282,21 +282,21 @@ class Board:
     def draw_platforms(level):
         for i in range(level):
             if i % 2 == 0:  # Even platforms for mario
-                pyxel.blt(config.WIDTH - 4.5*config.TILE_DIMENSION,
+                pyxel.blt(config.WIDTH - 4.25*config.TILE_DIMENSION,
                           config.HEIGHT - (i)*config.TILE_DIMENSION,
                           *config.STAIR)
-                for j in range(3):
+                for j in range(2):
                     pyxel.blt(
-                        config.WIDTH - (3.5 + j*0.5)*config.TILE_DIMENSION,
+                        config.WIDTH - (3.75 + j*0.5)*config.TILE_DIMENSION,
                         config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
             else:
-                pyxel.blt(4*config.TILE_DIMENSION - config.TILE_DIMENSION//4,
+                pyxel.blt(4*config.TILE_DIMENSION - config.TILE_DIMENSION//2,
                           config.HEIGHT - (i)*config.TILE_DIMENSION,
                           *config.STAIR)
-                for j in range(3):
+                for j in range(2):
                     pyxel.blt(
-                        (3.25 + j*0.5)*config.TILE_DIMENSION,
+                        (3.5 + j*0.5)*config.TILE_DIMENSION,
                         config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
 
@@ -311,7 +311,6 @@ class Board:
             package.update()
 
             if package.at_the_end():
-                print(package.level)
                 if package.level == self.number_of_conveyors - 1:
                     print("success")
                     self.truck.number_of_packages += 1
@@ -320,14 +319,18 @@ class Board:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
                     else:
-                        package.state = "BROKEN"
+                        package.broken()
+                        self.packages.remove(package)
+                        if self.fails < 3:
+                            self.fails += 1
                 else:
                     if package.level == self.luigi.level * 2 + 1:
                         package.move_to_next_conveyor()
                     else:
-                        package.state = "BROKEN"
-                        if self.score < 3:
-                            self.score += 1
+                        package.broken()
+                        self.packages.remove(package)
+                        if self.fails < 3:
+                            self.fails += 1
 
     def draw(self):
 

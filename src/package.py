@@ -70,6 +70,10 @@ class Package:
     def at_the_end(self):
         return self.__at_the_end
 
+    def broken(self):
+        self.__at_the_end = False
+        self.state = "BROKEN"
+
     def move_to_next_conveyor(self):
 
         self.__at_the_end = False
