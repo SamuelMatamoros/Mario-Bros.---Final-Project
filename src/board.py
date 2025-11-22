@@ -196,9 +196,14 @@ class Board:
 
             self.conveyors.append(Conveyor(i, self.conveyor_speed))
 
+        print(self.conveyors)
+
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
+
+        for i in range(self.number_of_packages):
+            self.packages.append(Package("CONVEYOR"))
 
     def difficulty2(self):
         self.number_of_conveyors = 9 + 1  # The one represents the conveyor 0
@@ -215,6 +220,9 @@ class Board:
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
+
+        for i in range(self.number_of_packages):
+            self.packages.append(Package("CONVEYOR"))
 
     def difficulty3(self):
         self.number_of_conveyors = 5 + 1  # The one represents the conveyor 0
@@ -300,19 +308,33 @@ class Board:
                         config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
 
-    def update(self):
+    ########################
+    # UPDATE LOGIC SECTION #
+    ########################
 
-        self.__check_difficulty(self)
+    # # Packages
 
-        self.mario.update(self.number_of_conveyors)
-        self.luigi.update(self.number_of_conveyors)
+    def __package_gen(self):
+        """
+        method for package generation
+        """
 
+    def __package_update_all(self):
+        """
+        method for package update
+        """
         for package in self.packages:
+
+            package.speed = self.conveyors[package.level].speed
+            #########################
+            # TODO fix this shit, idk why it isn't working...
+            # print(self.conveyors[package.level].speed)
+            print("package speed:", package.speed)
+            print("package level:", package.level)
             package.update()
 
             if package.at_the_end():
                 if package.level == self.number_of_conveyors - 1:
-                    print("success")
                     self.truck.number_of_packages += 1
                     self.packages.remove(package)
                 if package.level % 2 == 0:
@@ -331,6 +353,15 @@ class Board:
                         self.packages.remove(package)
                         if self.fails < 3:
                             self.fails += 1
+
+    def update(self):
+
+        self.__check_difficulty(self)
+
+        self.mario.update(self.number_of_conveyors)
+        self.luigi.update(self.number_of_conveyors)
+
+        self.__package_update_all()
 
     def draw(self):
 

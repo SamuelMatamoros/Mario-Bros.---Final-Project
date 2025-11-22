@@ -47,8 +47,8 @@ class Package:
 
     @speed.setter
     def speed(self, value):
-        if not isinstance(value, int):
-            raise TypeError("'speed' must be an integer")
+        if not isinstance(value, (int, float)):
+            raise TypeError("'speed' must be a number")
         elif value < 0 or value > 2:
             return ValueError("'speed' must be beetwen 0.5 and 2")
         else:

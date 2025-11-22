@@ -27,6 +27,15 @@ class Conveyor:
 
         self.draw()
 
+    def __str__(self):
+        string = (f"level: {self.level}\n"
+                  f"speed: {self.speed}\n")
+
+        return string
+
+    def __repr__(self):
+        return self.__str__()
+
     # level property
     @property
     def level(self) -> int:
