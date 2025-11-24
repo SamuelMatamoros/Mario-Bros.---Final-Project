@@ -160,6 +160,8 @@ class Board:
         if self.difficulty != self.__previous_difficulty:
             self.mario.level = 0
             self.luigi.level = 0
+            self.conveyors = []
+            self.packages = []
             self.__previous_difficulty = self.difficulty
 
             if self.difficulty == 0:
@@ -177,6 +179,7 @@ class Board:
         self.conveyors = [
                 Conveyor(i, 1) for i in range(self.number_of_conveyors)
                 ]
+
         self.packages = []
         self.number_of_packages = 1
         self.points_for_package = 50
@@ -195,8 +198,6 @@ class Board:
                 self.conveyor_speed = 1.5
 
             self.conveyors.append(Conveyor(i, self.conveyor_speed))
-
-        print(self.conveyors)
 
         self.packages = []
         self.number_of_packages = 1
@@ -326,11 +327,6 @@ class Board:
         for package in self.packages:
 
             package.speed = self.conveyors[package.level].speed
-            #########################
-            # TODO fix this shit, idk why it isn't working...
-            # print(self.conveyors[package.level].speed)
-            print("package speed:", package.speed)
-            print("package level:", package.level)
             package.update()
 
             if package.at_the_end():

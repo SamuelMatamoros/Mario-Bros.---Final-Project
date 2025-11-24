@@ -35,7 +35,7 @@ class Package:
     def level(self, level: int):
         if not isinstance(level, int):
             raise TypeError("level must be an integer")
-        elif level < 0 or level > 6:
+        elif level < 0 or level > 11:
             raise ValueError("level must be beetwen 0 and 6")
         self.__level = level
 
