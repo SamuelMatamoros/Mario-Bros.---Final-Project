@@ -11,9 +11,6 @@ class Character:
         self.level = 0
         self.has_package = False
 
-        # Methods
-        self.draw()
-
     # level property
     @property
     def level(self) -> int:
@@ -52,9 +49,30 @@ class Character:
         else:
             self.__character = character
 
+    def __sprite_decide(self):
+        if self.character == "MARIO":
+            self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
+            self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+            if self.level == 0:
+                if self.has_package:
+                    self.__sprite = config.MARIO_PACKAGE_FLIPPED
+                else:
+                    self.__sprite = config.MARIO_DEF_RIGHT
+            elif self.has_package:
+                self.__sprite = config.MARIO_PACKAGE
+            else:
+                self.__sprite = config.MARIO_DEF_LEFT
+
+        if self.character == "LUIGI":
+            self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
+            self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+            if self.has_package:
+                self.__sprite = config.LUIGI_PACKAGE
+            else:
+                self.__sprite = config.LUIGI_DEF_RIGHT
+
     def update(self, max_level):
         """ Update method for character class """
-
         if self.character == "MARIO":
             up_key = pyxel.KEY_UP
             down_key = pyxel.KEY_DOWN
@@ -69,19 +87,6 @@ class Character:
 
     def draw(self):
         """ Draw method """
-        if self.character == "MARIO":
-            x = 12 * config.TILE_DIMENSION - config.TILE_DIMENSION//2
-            y = 10 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
-            if self.level == 0:
-                sprite = config.MARIO_DEF_RIGHT
-            else:
-                sprite = config.MARIO_DEF_LEFT
-        elif self.character == "LUIGI":
-            x = 4 * config.TILE_DIMENSION - config.TILE_DIMENSION//4
-            y = 9 * config.TILE_DIMENSION + config.TILE_DIMENSION//2 + 2
-            sprite = config.LUIGI_DEF_RIGHT
-        else:
-            sprite = config.BOSS_ARMS_DOWN
-
-        pyxel.blt(x, y - 2*self.level*config.TILE_DIMENSION,
-                  *sprite, scale=1.3)
+        self.__sprite_decide()
+        pyxel.blt(self.__x, self.__y - 2*self.level*config.TILE_DIMENSION,
+                  *self.__sprite, scale=1.3)

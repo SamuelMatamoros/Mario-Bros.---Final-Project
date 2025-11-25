@@ -54,25 +54,19 @@ Please be sure to have the requirements installed before you run any of the code
 
 ### Sprint 1: Objects and graphical interface
 
-- [x] Create a class for each main game element: Characters, Conveyor, Truck, Package,
-etc.
-- [x] All the behavior logic of each entity must be contained in its corresponding class.
-Avoid including game logic in the main program (penalty if it occurs).
-- [x]  Design the graphical interface of the scenario: a single screen with the conveyor
-belts, floors, stairs, and truck.
+- [x] Create a class for each main game element: Characters, Conveyor, Truck, Package, etc.
+- [x] All the behavior logic of each entity must be contained in its corresponding class. Avoid including game logic in the main program (penalty if it occurs).
+- [x]  Design the graphical interface of the scenario: a single screen with the conveyor belts, floors, stairs, and truck.
 - [x] Implement a score counter and error counter (failures) visible during the game.
-- [x] Define the basic data structures that will manage the state of the conveyor belts,
-packages in transit, and the difficulty level.
+- [x] Define the basic data structures that will manage the state of the conveyor belts, packages in transit, and the difficulty level.
 
 ### Sprint 2: Mario and Luigi Movement
 
 - [x] Implement the vertical movement control of the characters:
     - [x] Mario: Arrow Up / Arrow Down keys.
     - [x] Luigi: W / S keys.
-- [x] Each character must be able to go up and down floors using the stairs, respecting
-the upper and lower limits.
-- [x] Graphically display the current position of each character (Floor0, Floor1, etc.) on
-the screen.
+- [x] Each character must be able to go up and down floors using the stairs, respecting the upper and lower limits.
+- [x] Graphically display the current position of each character (Floor0, Floor1, etc.) on the screen.
 
 ### Sprint 3: Packages movement
 
@@ -80,15 +74,12 @@ the screen.
     - [x] Conveyor0 generates empty boxes for Mario.
     - [x] Even Conveyors → controlled by Mario.
     - [x] Odd Conveyors → controlled by Luigi.
-- [ ] Graphical representation of the packages must change according to the belt they are
-on.
+- [ ] Graphical representation of the packages must change according to the belt they are on.
 - [ ] When a package reaches the end of a conveyor belt:
-	- [x] If the corresponding character is on the correct floor, they automatically pick
-        - [ ] \(_Extra:_\) change the sprite of Mario or Luigi.
-it up and pass it to the next conveyor belt.
+	- [x] If the corresponding character is on the correct floor, they automatically pick it up and pass it to the next conveyor belt.
 	- [x] If not, the package falls and a failure is recorded.
-- [x] Implement the automatic movement of packages based on the speed of the
-current level.
+    - [ ] \(_Extra:_\) change the sprite of Mario or Luigi.
+- [x] Implement the automatic movement of packages based on the speed of the current level.
 
 ### Sprint 4: Scoring system, failures, and end of game
 
@@ -98,16 +89,14 @@ current level.
 - [ ] Manage the failure counter (3 failures = game over).
 - [ ] Implement the truck logic and character rest:
 	- [ ] When it receives 8 packages, it goes out for delivery.
-	- [ ] During delivery, the conveyor belts stop temporarily. If a package is at the last
-position of the conveyor, it is deleted.
+	- [ ] During delivery, the conveyor belts stop temporarily. If a package is at the last position of the conveyor, it is deleted.
 	- [ ] Upon return, activity resumes.
 - [ ] Display a game over message or animation when 3 failures are exceeded.
 - [ ] Complete Boss’s visual effects: he will appear when a package falls, after rest…
 
 ### Sprint 5: Difficulty levels and final adjustments (optional)
 
-- [ ] Incorporate the difficulty levels (Easy, Medium, Extreme, Crazy) according to the
-rule table:
+- [ ] Incorporate the difficulty levels (Easy, Medium, Extreme, Crazy) according to the rule table:
 	- [ ] Conveyor belt speed.
 	- [ ] Minimum number of packages in play.
 	- [ ] Failure elimination rules for truck delivery.
@@ -118,8 +107,8 @@ rule table:
 
 ### Extra functionality (ultra optional)
 
-- [ ] Incorporate welcoming screen/start menu
-    (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play)
+- [x] Incorporate menu for changing difficulty.
+- [ ] Incorporate welcoming screen/start menu (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play).
 
 ## Sources and relevant links
 
