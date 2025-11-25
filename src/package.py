@@ -138,7 +138,6 @@ class Package:
         if self.state == "CONVEYOR":
             sprite_idx = min(self.pipe_passes, len(config.PACKAGE_SPRITE) - 1)
             sprite = config.PACKAGE_SPRITE[sprite_idx]
-            print(f"Drawing sprite index: {sprite_idx} for pipe_passes: {self.pipe_passes}")
         else:  # For all other states
             sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite (or broken/handled as needed)
         pyxel.blt(self.x, self.y, *sprite)
