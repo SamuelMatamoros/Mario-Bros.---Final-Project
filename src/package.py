@@ -21,6 +21,8 @@ class Package:
         self.y = config.HEIGHT - 2*config.TILE_DIMENSION - 4
         self.speed = 1
         self.state = state
+        self.pipe_passes = 0   # i have to do setter and property
+        self.crossed_pipe = False
 
         self.__x_tick = 0
         self.__y_tick = -1
@@ -90,11 +92,15 @@ class Package:
         else:
             self.x = 10 * config.TILE_DIMENSION + 8
 
+        if self.level <= 5:
+            self.crossed_pipe = False
+
     def update(self):
         """
         update method for package class
         """
-
+        
+        old_x = self.x
         frames = 90 - 30 * self.speed
 
         if pyxel.frame_count % frames == 0:
@@ -118,18 +124,27 @@ class Package:
                 else:
                     self.__at_the_end = True
 
+            if not self.crossed_pipe:
+                if (old_x > config.PIPE_X and self.x <= config.PIPE_X):
+                    print("######## CRUCE DERECHA -> IZQUIERDA ########")
+                    self.pipe_passes = min(self.pipe_passes + 1, 4)
+                    self.crossed_pipe = True
+                elif (old_x < config.PIPE_X and self.x >= config.PIPE_X):
+                    print("######## CRUCE IZQUIERDA -> DERECHA ########")
+                    self.pipe_passes = min(self.pipe_passes + 1, 4)
+                    self.crossed_pipe = True
+
+                            
+
     def draw(self):
-
         if self.state == "CONVEYOR":
-            # sprite = config.PACKAGE_SPRITE[self.level]
-            sprite = config.PACKAGE_SPRITE[0]
-        elif self.state == "HANDLED":
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
-        elif self.state == "BROKEN":
-            # sprite = config.PACKAGE_SPRITE[self.level]
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
-        else:
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite
-
-        # sprite = config.PACKAGE_SPRITE[0]
+            sprite_idx = min(self.pipe_passes, len(config.PACKAGE_SPRITE) - 1)
+            sprite = config.PACKAGE_SPRITE[sprite_idx]
+            print(f"Drawing sprite index: {sprite_idx} for pipe_passes: {self.pipe_passes}")
+        else:  # For all other states
+            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite (or broken/handled as needed)
         pyxel.blt(self.x, self.y, *sprite)
+
+
+
+

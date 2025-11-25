@@ -320,6 +320,16 @@ class Board:
         method for package generation
         """
 
+    def update(self):
+
+        self.__check_difficulty(self)
+
+        self.mario.update(self.number_of_conveyors)
+        self.luigi.update(self.number_of_conveyors)
+
+        self.__package_update_all()
+
+
     def __package_update_all(self):
         """
         method for package update
@@ -349,15 +359,8 @@ class Board:
                         self.packages.remove(package)
                         if self.fails < 3:
                             self.fails += 1
+            
 
-    def update(self):
-
-        self.__check_difficulty(self)
-
-        self.mario.update(self.number_of_conveyors)
-        self.luigi.update(self.number_of_conveyors)
-
-        self.__package_update_all()
 
     def draw(self):
 

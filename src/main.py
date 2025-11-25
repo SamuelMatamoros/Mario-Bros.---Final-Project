@@ -3,7 +3,6 @@ import config
 
 from board import Board
 
-
 class Main:
     """
     Main class for the game
