@@ -320,7 +320,6 @@ class Board:
         method for package generation
         """
 
-
     def __package_update_all(self):
         """
         method for package update
@@ -352,6 +351,9 @@ class Board:
                         self.packages.remove(package)
                         if self.fails < 3:
                             self.fails += 1
+            else:
+                self.mario.has_package = False
+                self.luigi.has_package = False
 
     def update(self):
 
