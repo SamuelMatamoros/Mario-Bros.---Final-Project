@@ -99,7 +99,7 @@ class Package:
         """
         update method for package class
         """
-        
+
         old_x = self.x
         frames = 90 - 30 * self.speed
 
@@ -126,11 +126,9 @@ class Package:
 
             if not self.crossed_pipe:
                 if (old_x > config.PIPE_X and self.x <= config.PIPE_X):
-                    print("######## CRUCE DERECHA -> IZQUIERDA ########")
                     self.pipe_passes = min(self.pipe_passes + 1, 4)
                     self.crossed_pipe = True
                 elif (old_x < config.PIPE_X and self.x >= config.PIPE_X):
-                    print("######## CRUCE IZQUIERDA -> DERECHA ########")
                     self.pipe_passes = min(self.pipe_passes + 1, 4)
                     self.crossed_pipe = True
 

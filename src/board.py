@@ -346,6 +346,7 @@ class Board:
                 if package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
+                        self.mario.has_package = True
                     else:
                         package.broken()
                         self.packages.remove(package)
@@ -354,13 +355,21 @@ class Board:
                 else:
                     if package.level == self.luigi.level * 2 + 1:
                         package.move_to_next_conveyor()
+                        self.luigi.has_package = True
                     else:
                         package.broken()
                         self.packages.remove(package)
                         if self.fails < 3:
                             self.fails += 1
-            
 
+    def update(self):
+
+        self.__check_difficulty(self)
+
+        self.mario.update(self.number_of_conveyors)
+        self.luigi.update(self.number_of_conveyors)
+
+        self.__package_update_all()
 
     def draw(self):
 
