@@ -162,6 +162,7 @@ class Board:
             self.luigi.level = 0
             self.conveyors = []
             self.packages = []
+            self.truck.number_of_packages = 0
             self.__previous_difficulty = self.difficulty
 
             if self.difficulty == 0:
