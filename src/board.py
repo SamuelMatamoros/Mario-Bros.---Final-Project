@@ -8,7 +8,12 @@ from truck import Truck
 
 
 class Board:
-    """ Class for the game board """
+    """
+    Class for the game board.
+
+    This class holds the unification of all of the other classes in order to
+    provide a well structured game logic and gameplay.
+    """
 
     def __init__(self):
         """
@@ -85,6 +90,12 @@ class Board:
     ################
 
     def menu_update(self):
+        """
+        Update method for the menu.
+
+        Here lays the logic of how the menu behaves, the level selection,
+        confirming and navigation.
+        """
         if pyxel.btnp(pyxel.KEY_M):
             if self.menu_active:
                 self.menu_active = False
@@ -103,6 +114,11 @@ class Board:
                 self.menu_active = False
 
     def menu_draw(self):
+        """
+        Draw method for the menu.
+
+        How the menu is drawn to the board when called upon.
+        """
         pyxel.dither(0.6)
         pyxel.rect(0, 0, config.WIDTH, config.HEIGHT, 1)
         pyxel.dither(1)
@@ -132,7 +148,13 @@ class Board:
                        col)
 
     def top_menu(self):
-        # This creates the menu at the top with Exit, fails, fails and menu
+        """
+        Top Menu method.
+
+        This handles the logic for the counters that will be visible during
+        the gameplay that contain the score and fail counter and other buttons.
+        """
+
         text_y = 9
         text_col = 7
 
@@ -156,8 +178,17 @@ class Board:
 
     @staticmethod
     def __check_difficulty(self):
+        """
+        Difficulty checker method.
+
+        This method checks wheter the level has changed, errases the previous
+        variables and executes the new difficulty method.
+        """
 
         if self.difficulty != self.__previous_difficulty:
+            """
+            This resets the variables to start clean the new difficulty.
+            """
             self.mario.level = 0
             self.luigi.level = 0
             self.conveyors = []
@@ -251,7 +282,9 @@ class Board:
               level=False,
               difficulty=False,
               tiles=False):
-        # tests
+        """
+        Test method for displaying useful information for debugging.
+        """
         if dim:
             pyxel.text(32, 16, f"Width: {config.WIDTH}", 7)
             pyxel.text(32, 32, f"Height: {config.HEIGHT}", 7)
@@ -273,7 +306,6 @@ class Board:
 
     @staticmethod
     def draw_pipe():
-        # # This creates the pipe in the middle
         for i in range(config.TILES_OF_HEIGHT):
             pyxel.blt(config.WIDTH//2 - 8,  # puts the pipe in the middle
                       config.TILE_DIMENSION * i,
@@ -318,25 +350,43 @@ class Board:
 
     def __package_gen(self):
         """
-        method for package generation
+        Method for package generation.
         """
 
     def __package_update_all(self):
         """
-        method for package update
+        Method for package update.
         """
         for package in self.packages:
 
+            """
+            This sets the speed of the package to match the speed of the
+            conveyor its located in.
+
+                'self.conveyors' is the list of all conveyors in the level
+                                 ordered by level
+            Setting the speed is done exernaly because it affects the rate at
+            which the package is updated.
+            """
             package.speed = self.conveyors[package.level].speed
             package.update()
 
             if package.at_the_end():
                 if package.level == self.number_of_conveyors - 1:
-                    self.truck.number_of_packages += 1
-                    self.packages.remove(package)
-                if package.level % 2 == 0:
+                    if package.level == self.luigi.level * 2 + 1:
+                        self.luigi.has_package = False
+                        self.truck.number_of_packages += 1
+                        package.state = "TRUCK"
+                    else:
+                        package.broken()
+                elif package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
+                        """
+                        This is here in order to change the sprite, but we
+                        need to make it so it is animated, not just a 1 frame
+                        change
+                        """
                         self.mario.has_package = True
                     else:
                         package.broken()
@@ -353,8 +403,14 @@ class Board:
                         if self.fails < 3:
                             self.fails += 1
             else:
+                """
+                This is in order to reestablish the default sprite.
+                """
                 self.mario.has_package = False
                 self.luigi.has_package = False
+
+            if package.state == "BROKEN" or package.state == "TRUCK":
+                self.packages.remove(package)
 
     def update(self):
 

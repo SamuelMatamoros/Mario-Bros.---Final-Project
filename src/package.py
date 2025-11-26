@@ -7,30 +7,37 @@ class Package:
     Class for a package in the game.
 
     Attributes:
+        x : int
+            x position on the board
+        y : int
+            y position on the board
+        speed : float
+            the speed at which the package updates
         level : int
             The conveyor level of the package (starts at 0, ends at 6).
         state : str
-            The state of the package. "in_conveyor", "handled", "broken",
-            "at_truck", "other".
+            The state of the package. "CONVEYOR", "HANDLED", "BROKEN",
+            "TRUCK".
     """
 
     def __init__(self, state: str = "in_conveyor"):
         # Attributes
-        self.level = 0              # initial level set to 0
         self.x = config.WIDTH - 1*config.TILE_DIMENSION
         self.y = config.HEIGHT - 2*config.TILE_DIMENSION - 4
+        self.level = 0
         self.speed = 1
         self.state = state
-        self.pipe_passes = 0   # i have to do setter and property
-        self.crossed_pipe = False
 
         self.__x_tick = 0
         self.__y_tick = -1
         self.__at_the_end = False
+        self.__pipe_passes = 0
+        self.__crossed_pipe = False
 
     # level property
     @property
     def level(self) -> int:
+        """The level property"""
         return self.__level
 
     @level.setter
@@ -45,7 +52,7 @@ class Package:
     @property
     def speed(self):
         """The speed property."""
-        return self._speed
+        return self.__speed
 
     @speed.setter
     def speed(self, value):
@@ -54,11 +61,12 @@ class Package:
         elif value < 0 or value > 2:
             return ValueError("'speed' must be beetwen 0.5 and 2")
         else:
-            self._speed = value
+            self.__speed = value
 
     # state property
     @property
     def state(self) -> str:
+        """The state property"""
         return self.__state
 
     @state.setter
@@ -70,13 +78,21 @@ class Package:
         self.__state = state
 
     def at_the_end(self):
+        """Method that returns True if the package is at the end"""
         return self.__at_the_end
 
     def broken(self):
+        """
+        Method executed when a package is at the end but the character
+        is not.
+        """
         self.__at_the_end = False
         self.state = "BROKEN"
 
     def move_to_next_conveyor(self):
+        """
+        Method that moves the package to the next level.
+        """
 
         self.__at_the_end = False
 
@@ -93,7 +109,7 @@ class Package:
             self.x = 10 * config.TILE_DIMENSION + 8
 
         if self.level <= 5:
-            self.crossed_pipe = False
+            self.__crossed_pipe = False
 
     def update(self):
         """
@@ -124,24 +140,20 @@ class Package:
                 else:
                     self.__at_the_end = True
 
-            if not self.crossed_pipe:
+            if not self.__crossed_pipe:
                 if (old_x > config.PIPE_X and self.x <= config.PIPE_X):
-                    self.pipe_passes = min(self.pipe_passes + 1, 4)
-                    self.crossed_pipe = True
+                    self.__pipe_passes = min(self.__pipe_passes + 1, 4)
+                    self.__crossed_pipe = True
                 elif (old_x < config.PIPE_X and self.x >= config.PIPE_X):
-                    self.pipe_passes = min(self.pipe_passes + 1, 4)
-                    self.crossed_pipe = True
-
-                            
+                    self.__pipe_passes = min(self.__pipe_passes + 1, 4)
+                    self.__crossed_pipe = True
 
     def draw(self):
         if self.state == "CONVEYOR":
-            sprite_idx = min(self.pipe_passes, len(config.PACKAGE_SPRITE) - 1)
+            sprite_idx = min(self.__pipe_passes,
+                             len(config.PACKAGE_SPRITE) - 1)
             sprite = config.PACKAGE_SPRITE[sprite_idx]
-        else:  # For all other states
-            sprite = (2, 0, 0, 8, 8, 0)  # Empty sprite (or broken/handled as needed)
+        else:
+            # Empty sprite (or broken/handled as needed)
+            sprite = (2, 0, 0, 8, 8, 0)
         pyxel.blt(self.x, self.y, *sprite)
-
-
-
-

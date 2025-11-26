@@ -8,7 +8,7 @@ class Conveyor:
 
     Attributes:
         level : int
-            The current level/platform the conveyor is on.
+            The self.__current level/platform the conveyor is on.
         speed : int
             The speed at which the conveyor moves packages.
     """
@@ -18,14 +18,13 @@ class Conveyor:
         This method is used to create Conveyor objects.
 
         :param level: int. Platform number (e.g., 1, 2, 3) of the conveyor.
-        :param direction: str. Direction of conveyor, either "left" or "right".
         :param speed: int. Speed at which the conveyor moves packages.
         """
         self.level = level
         self.speed = float(speed)
-        self.packages = []
 
-        self.draw()
+        self.__current = config.CONVEYOR_0
+        self.__previous = config.CONVEYOR_1
 
     def __str__(self):
         string = (f"level: {self.level}\n"
@@ -39,6 +38,7 @@ class Conveyor:
     # level property
     @property
     def level(self) -> int:
+        """The level property"""
         return self.__level
 
     @level.setter
@@ -53,6 +53,7 @@ class Conveyor:
     # speed property
     @property
     def speed(self) -> float:
+        """The speed property"""
         return self.__speed
 
     @speed.setter
@@ -66,22 +67,30 @@ class Conveyor:
 
     def draw(self):
         """
-        Draw the conveyor
+        Draw the conveyor.
         """
+
+        frame_rate = 120 - 30*self.speed
+
+        # This animates the coveyors depending on the speed
+        if pyxel.frame_count % frame_rate == 0:
+            self.__previous, self.__current = self.__current, self.__previous
+        # self.__current = config.CONVEYOR_1
+
         if self.level == 0:
             for i in range(3):
                 pyxel.blt((13 + i) * config.TILE_DIMENSION,
                           10 * config.TILE_DIMENSION,
-                          *config.CONVEYOR_0[i])
+                          *self.__current[i])
         elif self.level % 2 == 0:  # Even conveyors
-            for i in range(len(config.CONVEYOR_0)):
+            for i in range(len(self.__current)):
                 pyxel.blt(
                     (5 + i) * config.TILE_DIMENSION + config.TILE_DIMENSION//4,
                     config.HEIGHT - (self.level + 1) * config.TILE_DIMENSION,
-                    *config.CONVEYOR_0[i])
+                    *self.__current[i])
         else:
-            for i in range(len(config.CONVEYOR_0)):
+            for i in range(len(self.__current)):
                 pyxel.blt(
                     (5 + i) * config.TILE_DIMENSION,
                     config.HEIGHT - (self.level + 1) * config.TILE_DIMENSION,
-                    *config.CONVEYOR_0[i])
+                    *self.__current[i])

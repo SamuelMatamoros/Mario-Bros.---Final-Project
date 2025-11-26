@@ -3,8 +3,20 @@ import pyxel
 
 
 class Character:
+    """
+    Character class
+
+    This class holds the code for the character behaviour.
+    """
 
     def __init__(self, character: str):
+        """
+        Init method for character class.
+
+        Attributes:
+            character : str
+                The name of the character in all caps
+        """
 
         # Attributes
         self.character = character.upper()
@@ -14,6 +26,7 @@ class Character:
     # level property
     @property
     def level(self) -> int:
+        """The level property"""
         return self.__level
 
     @level.setter
@@ -27,6 +40,7 @@ class Character:
     # has_package property
     @property
     def has_package(self) -> bool:
+        """The has_package property"""
         return self.__has_package
 
     @has_package.setter
@@ -37,6 +51,7 @@ class Character:
 
     @property
     def character(self) -> str:
+        """The character property"""
         return self.__character
 
     @character.setter
@@ -50,6 +65,12 @@ class Character:
             self.__character = character
 
     def __sprite_decide(self):
+        """
+        Method for deciding the sprite.
+
+        It depends on the level the character has and wheather he is holding
+        package or not.
+        """
         if self.character == "MARIO":
             self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
             self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
@@ -72,7 +93,7 @@ class Character:
                 self.__sprite = config.LUIGI_DEF_RIGHT
 
     def update(self, max_level):
-        """ Update method for character class """
+        """Update method for character class."""
         if self.character == "MARIO":
             up_key = pyxel.KEY_UP
             down_key = pyxel.KEY_DOWN
@@ -86,7 +107,7 @@ class Character:
             self.level -= 1
 
     def draw(self):
-        """ Draw method """
+        """Draw method for character class."""
         self.__sprite_decide()
         pyxel.blt(self.__x, self.__y - 2*self.level*config.TILE_DIMENSION,
                   *self.__sprite, scale=1.3)

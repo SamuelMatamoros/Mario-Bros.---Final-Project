@@ -69,23 +69,21 @@ CONVEYOR_0 = [
         ]
 
 CONVEYOR_1 = [
-        (1, 16, 96, 16, 16, 0),      # Conveyor left 0
-        (1, 32, 80, 16, 16, 0),      # Conveyor 0
-        (1, 32, 80, 16, 16, 0),      # Conveyor 0
-        (1, 32, 80, 16, 16, 0),      # Conveyor 0
-        (1, 32, 80, 16, 16, 0),      # Conveyor 0
-        (1, 48, 96, 16, 16, 0),      # Conveyor right 0
+        (1, 32, 80, 16, 16, 0),      # Conveyor left 1
+        (1, 16, 96, 16, 16, 0),      # Conveyor 1
+        (1, 16, 96, 16, 16, 0),      # Conveyor 1
+        (1, 16, 96, 16, 16, 0),      # Conveyor 1
+        (1, 16, 96, 16, 16, 0),      # Conveyor 1
+        (1, 48, 96, 16, 16, 0),      # Conveyor right 1
         ]
 
+PIPE_X = WIDTH//2 - 8
 PIPE_BIG = (1, 32, 32, 16, 16, 0)
-MACHINE = (1, 64, 16, 32, 32, 0)
-DOOR = (1, 0, 80, 16, 16, 0)
-
-
 HOR_HALF_PIPE = (1, 0, 112, 8, 16, 0)
 L_PIPE = (1, 16, 112, 16, 16, 0)
 VERT_PIPE = (1, 38, 112, 4, 16, 0)
 
-STAIR = (1, 48, 112, 16, 16, 0, 0)
+MACHINE = (1, 64, 16, 32, 32, 0)
+DOOR = (1, 0, 80, 16, 16, 0)
 
-PIPE_X = WIDTH//2 - 8
+STAIR = (1, 48, 112, 16, 16, 0, 0)

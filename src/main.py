@@ -3,6 +3,7 @@ import config
 
 from board import Board
 
+
 class Main:
     """
     Main class for the game
@@ -27,6 +28,7 @@ class Main:
         """
         self.board.menu_update()
 
+        # This line stops the game from executing while the menu is active
         if not self.board.menu_active:
             self.board.update()
 
@@ -38,8 +40,10 @@ class Main:
 
         self.board.draw()
 
+        # This line draws the board while is active
         if self.board.menu_active:
             self.board.menu_draw()
 
 
+# Executes the main class
 Main()
