@@ -83,9 +83,9 @@ Please be sure to have the requirements installed before you run any of the code
 
 ### Sprint 4: Scoring system, failures, and end of game
 
-- [ ] Implement scoring:
-	- [ ] +1 point for each package correctly delivered to the next conveyor belt.
-	- [ ] +10 points for each completed truck (8 packages delivered).
+- [x] Implement scoring:
+	- [x] +1 point for each package correctly delivered to the next conveyor belt.
+	- [x] +10 points for each completed truck (8 packages delivered).
 - [ ] Manage the failure counter (3 failures = game over).
 - [ ] Implement the truck logic and character rest:
 	- [ ] When it receives 8 packages, it goes out for delivery.

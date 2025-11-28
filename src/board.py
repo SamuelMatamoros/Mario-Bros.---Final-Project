@@ -1,3 +1,4 @@
+import time
 import random
 import pyxel
 import config
@@ -29,6 +30,8 @@ class Board:
 
         self.menu_active = False
         self.__menu_selected = self.difficulty
+
+        self.__game_over = False
 
         self.mario = Character("MARIO")
         self.luigi = Character("LUIGI")
@@ -206,71 +209,75 @@ class Board:
                 self.difficulty3()
 
     def difficulty0(self):
-        self.number_of_conveyors = 5 + 1  # The one represents the conveyor 0
-        self.conveyor_speed = 1
+        self.__number_of_conveyors = 5 + 1  # The one represents the conveyor 0
+        self.__conveyor_speed = 1
         self.conveyors = [
-                Conveyor(i, 1) for i in range(self.number_of_conveyors)
+                Conveyor(i, 1) for i in range(self.__number_of_conveyors)
                 ]
 
         self.packages = []
         self.number_of_packages = 1
-        self.points_for_package = 50
+        self.__points_for_package = 50
+        self.__number_of_deliveries = 0
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
 
     def difficulty1(self):
-        self.number_of_conveyors = 7 + 1  # The one represents the conveyor 0
-        for i in range(self.number_of_conveyors):
+        self.__number_of_conveyors = 7 + 1  # The one represents the conveyor 0
+        for i in range(self.__number_of_conveyors):
             if i == 0:
-                self.conveyor_speed = 1
+                self.__conveyor_speed = 1
             elif i % 2 == 0:
-                self.conveyor_speed = 1
+                self.__conveyor_speed = 1
             else:
-                self.conveyor_speed = 1.5
+                self.__conveyor_speed = 1.5
 
-            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+            self.conveyors.append(Conveyor(i, self.__conveyor_speed))
 
         self.packages = []
         self.number_of_packages = 1
-        self.points_for_package = 50
+        self.__points_for_package = 30
+        self.__number_of_deliveries = 0
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
 
     def difficulty2(self):
-        self.number_of_conveyors = 9 + 1  # The one represents the conveyor 0
-        for i in range(self.number_of_conveyors):
+        self.__number_of_conveyors = 9 + 1  # The one represents the conveyor 0
+        for i in range(self.__number_of_conveyors):
             if i == 0:
-                self.conveyor_speed = 1
+                self.__conveyor_speed = 1
             elif i % 2 == 0:
-                self.conveyor_speed = 1.5
+                self.__conveyor_speed = 1.5
             else:
-                self.conveyor_speed = 2
+                self.__conveyor_speed = 2
 
-            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+            self.conveyors.append(Conveyor(i, self.__conveyor_speed))
 
         self.packages = []
         self.number_of_packages = 1
-        self.points_for_package = 50
+        self.__points_for_package = 30
+        self.__number_of_deliveries = 0
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
 
     def difficulty3(self):
-        self.number_of_conveyors = 5 + 1  # The one represents the conveyor 0
-        for i in range(self.number_of_conveyors):
+        self.__number_of_conveyors = 5 + 1  # The one represents the conveyor 0
+        for i in range(self.__number_of_conveyors):
             if i == 0:
-                self.conveyor_speed = 1
+                self.__conveyor_speed = 1
             else:
-                self.conveyor_speed = 1 + random.randint(1, 3)//2
+                self.__conveyor_speed = 1 + random.randint(1, 3)//2
 
-            self.conveyors.append(Conveyor(i, self.conveyor_speed))
+            self.conveyors.append(Conveyor(i, self.__conveyor_speed))
 
         self.packages = []
 
         self.number_of_packages = 1
-        self.points_for_package = 50
+        self.__points_for_package = 50
+        self.__number_of_deliveries = 0
 
     ####################
     # DRAWINGS SECTION #
@@ -352,6 +359,11 @@ class Board:
         """
         Method for package generation.
         """
+        if len(self.packages) == 0:
+            self.packages.append(Package("CONVEYOR"))
+
+        if self.score % self.__points_for_package == 0:
+            self.number_of_packages += 1
 
     def __package_update_all(self):
         """
@@ -372,16 +384,18 @@ class Board:
             package.update()
 
             if package.at_the_end():
-                if package.level == self.number_of_conveyors - 1:
+                if package.level == self.__number_of_conveyors - 1:
                     if package.level == self.luigi.level * 2 + 1:
                         self.luigi.has_package = False
                         self.truck.number_of_packages += 1
+                        self.score += 1
                         package.state = "TRUCK"
                     else:
                         package.broken()
                 elif package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
+                        self.score += 1
                         """
                         This is here in order to change the sprite, but we
                         need to make it so it is animated, not just a 1 frame
@@ -390,18 +404,15 @@ class Board:
                         self.mario.has_package = True
                     else:
                         package.broken()
-                        self.packages.remove(package)
-                        if self.fails < 3:
-                            self.fails += 1
+                        self.fails += 1
                 else:
                     if package.level == self.luigi.level * 2 + 1:
                         package.move_to_next_conveyor()
+                        self.score += 1
                         self.luigi.has_package = True
                     else:
                         package.broken()
-                        self.packages.remove(package)
-                        if self.fails < 3:
-                            self.fails += 1
+                        self.fails += 1
             else:
                 """
                 This is in order to reestablish the default sprite.
@@ -412,14 +423,35 @@ class Board:
             if package.state == "BROKEN" or package.state == "TRUCK":
                 self.packages.remove(package)
 
+    def __truck_delivery(self):
+        """
+        Here we put the logic for when the truck is full:
+          resting characters, more points, ...
+        """
+        self.score += 10
+        self.__number_of_deliveries += 1
+        self.truck.number_of_packages = 0
+        time.sleep(3)  # temporary, it will be changed for an animation
+
+    def __game_over(self):
+        self.__game_over = True
+        print("YOU'VE LOST!")
+
     def update(self):
 
         self.__check_difficulty(self)
 
-        self.mario.update(self.number_of_conveyors)
-        self.luigi.update(self.number_of_conveyors)
+        self.mario.update(self.__number_of_conveyors)
+        self.luigi.update(self.__number_of_conveyors)
 
+        self.__package_gen()
         self.__package_update_all()
+
+        if self.truck.number_of_packages == 8:
+            self.__truck_delivery()
+
+        if self.fails == 3:
+            self.__game_over()
 
     def draw(self):
 
@@ -431,9 +463,9 @@ class Board:
         for package in self.packages:
             package.draw()
 
-        self.draw_platforms(self.number_of_conveyors)
+        self.draw_platforms(self.__number_of_conveyors)
 
-        self.truck.draw(self.number_of_conveyors)
+        self.truck.draw(self.__number_of_conveyors)
 
         self.mario.draw()
         self.luigi.draw()
