@@ -74,8 +74,8 @@ Please be sure to have the requirements installed before you run any of the code
     - [x] Conveyor0 generates empty boxes for Mario.
     - [x] Even Conveyors → controlled by Mario.
     - [x] Odd Conveyors → controlled by Luigi.
-- [ ] Graphical representation of the packages must change according to the belt they are on.
-- [ ] When a package reaches the end of a conveyor belt:
+- [x] Graphical representation of the packages must change according to the belt they are on.
+- [x] When a package reaches the end of a conveyor belt:
 	- [x] If the corresponding character is on the correct floor, they automatically pick it up and pass it to the next conveyor belt.
 	- [x] If not, the package falls and a failure is recorded.
     - [ ] \(_Extra:_\) change the sprite of Mario or Luigi.

@@ -23,6 +23,8 @@ class Character:
         self.level = 0
         self.has_package = False
 
+        self.__sprite_frame_count = -1
+
     # level property
     @property
     def level(self) -> int:
@@ -71,26 +73,33 @@ class Character:
         It depends on the level the character has and wheather he is holding
         package or not.
         """
+
         if self.character == "MARIO":
             self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
             self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
             if self.level == 0:
-                if self.has_package:
+                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
                     self.__sprite = config.MARIO_PACKAGE_FLIPPED
+                    self.__sprite_frame_count += 1
                 else:
                     self.__sprite = config.MARIO_DEF_RIGHT
-            elif self.has_package:
+                    self.__sprite_frame_count = -1
+            elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
                 self.__sprite = config.MARIO_PACKAGE
+                self.__sprite_frame_count += 1
             else:
                 self.__sprite = config.MARIO_DEF_LEFT
+                self.__sprite_frame_count = -1
 
         if self.character == "LUIGI":
             self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
             self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-            if self.has_package:
+            if self.has_package or 0 <= self.__sprite_frame_count <= 30:
                 self.__sprite = config.LUIGI_PACKAGE
+                self.__sprite_frame_count += 1
             else:
                 self.__sprite = config.LUIGI_DEF_RIGHT
+                self.__sprite_frame_count = -1
 
     def update(self, max_level):
         """Update method for character class."""
