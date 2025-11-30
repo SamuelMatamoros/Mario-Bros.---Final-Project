@@ -86,12 +86,12 @@ Please be sure to have the requirements installed before you run any of the code
 - [x] Implement scoring:
 	- [x] +1 point for each package correctly delivered to the next conveyor belt.
 	- [x] +10 points for each completed truck (8 packages delivered).
-- [ ] Manage the failure counter (3 failures = game over).
+- [x] Manage the failure counter (3 failures = game over).
 - [ ] Implement the truck logic and character rest:
 	- [ ] When it receives 8 packages, it goes out for delivery.
 	- [ ] During delivery, the conveyor belts stop temporarily. If a package is at the last position of the conveyor, it is deleted.
 	- [ ] Upon return, activity resumes.
-- [ ] Display a game over message or animation when 3 failures are exceeded.
+- [x] Display a game over message or animation when 3 failures are exceeded.
 - [ ] Complete Boss’s visual effects: he will appear when a package falls, after rest…
 
 ### Sprint 5: Difficulty levels and final adjustments (optional)

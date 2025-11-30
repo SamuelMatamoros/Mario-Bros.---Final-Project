@@ -65,7 +65,7 @@ class Conveyor:
         else:
             self.__speed = speed
 
-    def draw(self):
+    def draw(self, stop: bool = False):
         """
         Draw the conveyor.
         """
@@ -73,7 +73,7 @@ class Conveyor:
         frame_rate = 120 - 30*self.speed
 
         # This animates the coveyors depending on the speed
-        if pyxel.frame_count % frame_rate == 0:
+        if pyxel.frame_count % frame_rate == 0 and not stop:
             self.__previous, self.__current = self.__current, self.__previous
         # self.__current = config.CONVEYOR_1
 

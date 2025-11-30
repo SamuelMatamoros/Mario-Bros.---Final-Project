@@ -30,8 +30,7 @@ class Board:
 
         self.menu_active = False
         self.__menu_selected = self.difficulty
-
-        self.__game_over = False
+        self.game_over = False
 
         self.mario = Character("MARIO")
         self.luigi = Character("LUIGI")
@@ -83,6 +82,18 @@ class Board:
             raise ValueError("fails must be positive")
         else:
             self.__fails = fails
+
+    @property
+    def game_over(self):
+        """The game_over property"""
+        return self.__game_over
+
+    @game_over.setter
+    def game_over(self, value):
+        if not isinstance(value, bool):
+            raise TypeError("game_over must be a bool")
+        else:
+            self.__game_over = value
 
     """
     METHODS SECTION
@@ -433,8 +444,8 @@ class Board:
         self.truck.number_of_packages = 0
         time.sleep(3)  # temporary, it will be changed for an animation
 
-    def __game_over(self):
-        self.__game_over = True
+    def game_is_over(self):
+        self.game_over = True
         print("YOU'VE LOST!")
 
     def update(self):
@@ -451,14 +462,14 @@ class Board:
             self.__truck_delivery()
 
         if self.fails == 3:
-            self.__game_over()
+            self.game_is_over()
 
     def draw(self):
 
         # self.tests(self, tiles=True, level=True)
 
         for conveyor in self.conveyors:
-            conveyor.draw()
+            conveyor.draw(self.game_over)
 
         for package in self.packages:
             package.draw()
