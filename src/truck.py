@@ -12,6 +12,8 @@ class Truck:
         # Attributes
         self.number_of_packages = 0
         self.state = "LOADING"
+        self.delivery_start_frame = None
+        self.delivering = False
 
     # number_of_packages property
     @property
@@ -40,6 +42,24 @@ class Truck:
             raise ValueError("state must be either 'LOADING' or 'DELIVERY'")
         else:
             self.__state = value
+
+    def start_delivery(self):
+        self.state = "DELIVERY"
+        self.delivery_start_frame = pyxel.frame_count
+
+    def delivery_done(self, duration_frames=180) -> bool:
+        if self.delivery_start_frame is None:
+            return False
+        return pyxel.frame_count - self.delivery_start_frame >= duration_frames
+    
+    def finish_delivery(self):
+        self.state = "LOADING"
+        self.delivery_start_frame = None
+        self.delivering = False
+        self.number_of_packages = 0
+
+
+
 
     def draw(self, level):
         """

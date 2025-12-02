@@ -24,6 +24,7 @@ class Board:
         # Attributes
         self.difficulty = 0
         self.__previous_difficulty = -1
+        self.last_score_for_spawn = -1
 
         self.score = 0
         self.fails = 0
@@ -36,6 +37,10 @@ class Board:
         self.luigi = Character("LUIGI")
 
         self.truck = Truck()
+
+        self.boss_active = False
+        self.boss_target = None  # "MARIO" o "LUIGI"
+        self.boss_timer = 0
 
     """
     PROPERTIES AND SETTERS SECTION
@@ -372,9 +377,7 @@ class Board:
         """
         if len(self.packages) == 0:
             self.packages.append(Package("CONVEYOR"))
-
-        if self.score % self.__points_for_package == 0:
-            self.number_of_packages += 1
+            self.last_score_for_spawn = self.score
 
     def __package_update_all(self):
         """
@@ -403,6 +406,12 @@ class Board:
                         package.state = "TRUCK"
                     else:
                         package.broken()
+                        self.fails += 1
+                        if not self.boss_active:
+                            self.boss_active = True
+                            self.boss_target = "LUIGI"
+                            self.boss_timer = 60
+
                 elif package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
                         package.move_to_next_conveyor()
@@ -411,11 +420,16 @@ class Board:
                         This is here in order to change the sprite, but we
                         need to make it so it is animated, not just a 1 frame
                         change
-                        """
+                        """ 
                         self.mario.has_package = True
                     else:
                         package.broken()
                         self.fails += 1
+                        if not self.boss_active:
+                            self.boss_active = True
+                            self.boss_target = "MARIO"
+                            self.boss_timer = 60       # 1 sec at 60 fps
+
                 else:
                     if package.level == self.luigi.level * 2 + 1:
                         package.move_to_next_conveyor()
@@ -424,6 +438,10 @@ class Board:
                     else:
                         package.broken()
                         self.fails += 1
+                        if not self.boss_active:
+                            self.boss_active = True
+                            self.boss_target = "LUIGI"
+                            self.boss_timer = 60 
             else:
                 """
                 This is in order to reestablish the default sprite.
@@ -442,7 +460,30 @@ class Board:
         self.score += 10
         self.__number_of_deliveries += 1
         self.truck.number_of_packages = 0
-        time.sleep(3)  # temporary, it will be changed for an animation
+
+        # Start delivery (this sets state = "DELIVERY" and stores frame)
+        self.truck.start_delivery()
+        
+        # Characters rest (later use this for rest animation)
+        self.mario.has_package = False
+        self.luigi.has_package = False
+
+        # Characters rest
+        self.mario.resting = True
+        self.luigi.resting = True
+        self.mario.has_package = False
+        self.luigi.has_package = False
+
+        # Remove packages at the last conveyor end
+        last_level = self.__number_of_conveyors - 1
+        to_remove = []
+        for pkg in self.packages:
+            if pkg.level == last_level and pkg.at_the_end():
+                to_remove.append(pkg)
+        for pkg in to_remove:
+            self.packages.remove(pkg)
+
+        
 
     def game_is_over(self):
         self.game_over = True
@@ -450,19 +491,50 @@ class Board:
 
     def update(self):
 
+        # 1) Difficulty setup
         self.__check_difficulty(self)
 
-        self.mario.update(self.__number_of_conveyors)
-        self.luigi.update(self.__number_of_conveyors)
+        # 2) Special events
 
-        self.__package_gen()
-        self.__package_update_all()
+        # Truck delivering
+        if self.truck.delivering:
+            if self.truck.delivery_done():
+                self.truck.finish_delivery()
+                self.mario.resting = False
+                self.luigi.resting = False
 
-        if self.truck.number_of_packages == 8:
-            self.__truck_delivery()
+        # Boss reprimand
+        if self.boss_active:
+            self.boss_timer -= 1
 
-        if self.fails == 3:
-            self.game_is_over()
+            if self.boss_target == "MARIO":
+                self.mario.reprimand = True
+                self.luigi.reprimand = False
+
+            elif self.boss_target == "LUIGI":
+                self.luigi.reprimand = True
+                self.mario.reprimand = False
+
+            if self.boss_timer <= 0:
+                self.boss_active = False
+                self.mario.reprimand = False
+                self.luigi.reprimand = False
+                self.boss_timer = 0
+
+        # 3) Normal game update when not special events
+        if not self.truck.delivering and not self.boss_active:
+            self.mario.update(self.__number_of_conveyors)
+            self.luigi.update(self.__number_of_conveyors)
+
+            self.__package_gen()
+            self.__package_update_all()
+
+            if self.truck.number_of_packages == 1:
+                self.__truck_delivery()
+
+            if self.fails == 3:
+                self.game_is_over()
+
 
     def draw(self):
 
@@ -485,3 +557,18 @@ class Board:
         self.draw_machine()
 
         self.top_menu()
+
+        if self.boss_active:
+            if self.boss_target == "LUIGI":
+                boss_x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION  # a la derecha de Luigi
+                boss_y = 3 * config.TILE_DIMENSION
+            else:  # "MARIO"
+                boss_x = config.WIDTH - 4 * config.TILE_DIMENSION  # a la izquierda de Mario/puerta
+                boss_y = 3 * config.TILE_DIMENSION
+
+            if pyxel.frame_count % 20 < 10:
+                sprite = config.BOSS_ARMS_UP
+            else:
+                sprite = config.BOSS_ARMS_DOWN
+
+            pyxel.blt(boss_x, boss_y, *sprite)

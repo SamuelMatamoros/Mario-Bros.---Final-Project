@@ -22,8 +22,10 @@ class Character:
         self.character = character.upper()
         self.level = 0
         self.has_package = False
+        self.resting = False
 
         self.__sprite_frame_count = -1
+        self.reprimand = False
 
     # level property
     @property
@@ -73,47 +75,69 @@ class Character:
         It depends on the level the character has and wheather he is holding
         package or not.
         """
+        if self.resting:
+            if self.character == "MARIO":
+                self.__sprite = config.MARIO_REST
+            elif self.character == "LUIGI":
+                self.__sprite = config.LUIGI_REST
+        
+        elif self.reprimand:
+            if self.character == "MARIO":
+                self.__x = config.WIDTH - 3 * config.TILE_DIMENSION
+                self.__y = 9 * config.TILE_DIMENSION
+                self.__sprite = config.MARIO_REPRIMAND
+            elif self.character == "LUIGI":
+                self.__x = 2 * config.TILE_DIMENSION
+                self.__y = 9 * config.TILE_DIMENSION
+                self.__sprite = config.LUIGI_REPRIMAND
 
-        if self.character == "MARIO":
-            self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
-            self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-            if self.level == 0:
-                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                    self.__sprite = config.MARIO_PACKAGE_FLIPPED
+        else:
+            if self.character == "MARIO":
+                self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
+                self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+                if self.level == 0:
+                    if self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                        self.__sprite = config.MARIO_PACKAGE_FLIPPED
+                        self.__sprite_frame_count += 1
+                    else:
+                        self.__sprite = config.MARIO_DEF_RIGHT
+                        self.__sprite_frame_count = -1
+                elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                    self.__sprite = config.MARIO_PACKAGE
                     self.__sprite_frame_count += 1
                 else:
-                    self.__sprite = config.MARIO_DEF_RIGHT
+                    self.__sprite = config.MARIO_DEF_LEFT
                     self.__sprite_frame_count = -1
-            elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                self.__sprite = config.MARIO_PACKAGE
-                self.__sprite_frame_count += 1
-            else:
-                self.__sprite = config.MARIO_DEF_LEFT
-                self.__sprite_frame_count = -1
 
-        if self.character == "LUIGI":
-            self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
-            self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-            if self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                self.__sprite = config.LUIGI_PACKAGE
-                self.__sprite_frame_count += 1
-            else:
-                self.__sprite = config.LUIGI_DEF_RIGHT
-                self.__sprite_frame_count = -1
+            if self.character == "LUIGI":
+                self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
+                self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                    self.__sprite = config.LUIGI_PACKAGE
+                    self.__sprite_frame_count += 1
+                else:
+                    self.__sprite = config.LUIGI_DEF_RIGHT
+                    self.__sprite_frame_count = -1
+
+        
 
     def update(self, max_level):
         """Update method for character class."""
-        if self.character == "MARIO":
-            up_key = pyxel.KEY_UP
-            down_key = pyxel.KEY_DOWN
-        if self.character == "LUIGI":
-            up_key = pyxel.KEY_W
-            down_key = pyxel.KEY_S
 
-        if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
-            self.level += 1
-        if pyxel.btnp(down_key) and 0 < self.level:
-            self.level -= 1
+        if not (self.resting or self.reprimand):
+            if self.character == "MARIO":
+                up_key = pyxel.KEY_UP
+                down_key = pyxel.KEY_DOWN
+            if self.character == "LUIGI":
+                up_key = pyxel.KEY_W
+                down_key = pyxel.KEY_S
+
+            if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
+                self.level += 1
+            if pyxel.btnp(down_key) and 0 < self.level:
+                self.level -= 1
+
+            self.__sprite_decide()
 
     def draw(self):
         """Draw method for character class."""
