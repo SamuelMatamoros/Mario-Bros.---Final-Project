@@ -78,7 +78,7 @@ Please be sure to have the requirements installed before you run any of the code
 - [x] When a package reaches the end of a conveyor belt:
 	- [x] If the corresponding character is on the correct floor, they automatically pick it up and pass it to the next conveyor belt.
 	- [x] If not, the package falls and a failure is recorded.
-    - [ ] \(_Extra:_\) change the sprite of Mario or Luigi.
+    - [x] \(_Extra:_\) change the sprite of Mario or Luigi.
 - [x] Implement the automatic movement of packages based on the speed of the current level.
 
 ### Sprint 4: Scoring system, failures, and end of game
@@ -87,12 +87,12 @@ Please be sure to have the requirements installed before you run any of the code
 	- [x] +1 point for each package correctly delivered to the next conveyor belt.
 	- [x] +10 points for each completed truck (8 packages delivered).
 - [x] Manage the failure counter (3 failures = game over).
-- [ ] Implement the truck logic and character rest:
-	- [ ] When it receives 8 packages, it goes out for delivery.
-	- [ ] During delivery, the conveyor belts stop temporarily. If a package is at the last position of the conveyor, it is deleted.
-	- [ ] Upon return, activity resumes.
+- [x] Implement the truck logic and character rest:
+	- [x] When it receives 8 packages, it goes out for delivery.
+	- [x] During delivery, the conveyor belts stop temporarily. If a package is at the last position of the conveyor, it is deleted.
+	- [x] Upon return, activity resumes.
 - [x] Display a game over message or animation when 3 failures are exceeded.
-- [ ] Complete Boss’s visual effects: he will appear when a package falls, after rest…
+- [x] Complete Boss’s visual effects: he will appear when a package falls, after rest…
 
 ### Sprint 5: Difficulty levels and final adjustments (optional)
 

@@ -520,6 +520,9 @@ class Board:
                 self.truck.finish_delivery()
                 self.mario.resting = False
                 self.luigi.resting = False
+                self.boss.boss_active = True
+                self.boss.boss_target = "BOTH"
+                self.boss.boss_timer = 60
 
         # Boss reprimand
         if self.boss.boss_active:
@@ -533,7 +536,7 @@ class Board:
             self.__package_gen()
             self.__package_update_all()
 
-            if self.truck.number_of_packages % 8 == 0 and (
+            if self.truck.number_of_packages % 1 == 0 and (
                     not self.truck.number_of_packages == 0):
                 self.__truck_delivery()
 

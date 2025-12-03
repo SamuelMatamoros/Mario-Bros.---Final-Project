@@ -25,7 +25,10 @@ class Character:
         self.resting = False
 
         self.__sprite_frame_count = -1
+
         self.reprimand = False
+
+        self.boss_active = False
         self.boss_target = "NONE"
         self.boss_timer = 0
 
@@ -79,7 +82,7 @@ class Character:
     def boss_target(self, value):
         if not isinstance(value, str):
             raise TypeError("'boss_target' must be a string")
-        elif value not in ("MARIO", "LUIGI", "NONE"):
+        elif value not in ("MARIO", "LUIGI", "BOTH", "NONE"):
             raise ValueError("'boss_target' must be Mario or Luigi")
         else:
             self.__boss_target = value
@@ -96,6 +99,18 @@ class Character:
         else:
             self.__boss_timer = value
 
+    @property
+    def boss_active(self):
+        """The boss_active property."""
+        return self.__boss_active
+
+    @boss_active.setter
+    def boss_active(self, value):
+        if not isinstance(value, bool):
+            raise TypeError("'boss_active' must be a bool")
+        else:
+            self.__boss_active = value
+
     def __sprite_decide(self):
         """
         Method for deciding the self.__sprite.
@@ -103,7 +118,6 @@ class Character:
         It depends on the level the character has and wheather he is holding
         package or not.
         """
-
         if self.character == "MARIO":
             self.__x = 12*config.TILE_DIMENSION-config.TILE_DIMENSION//2
             self.__y = 10*config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
@@ -148,9 +162,13 @@ class Character:
             if self.boss_target == "LUIGI":
                 self.__x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION
                 self.__y = 3 * config.TILE_DIMENSION
-            else:  # "MARIO"
+            else:
                 self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
                 self.__y = 3 * config.TILE_DIMENSION
+
+            if self.boss_target == "BOTH":
+                self.__x = config.WIDTH - 2*config.TILE_DIMENSION
+                self.__y = config.HEIGHT - 3.5*config.TILE_DIMENSION
 
             if pyxel.frame_count % 20 < 10:
                 self.__sprite = config.BOSS_ARMS_UP_INVERTED
