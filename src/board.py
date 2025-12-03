@@ -1,4 +1,4 @@
-import time
+# import time
 import random
 import pyxel
 import config
@@ -35,12 +35,11 @@ class Board:
 
         self.mario = Character("MARIO")
         self.luigi = Character("LUIGI")
+        self.boss = Character("BOSS")
 
         self.truck = Truck()
 
-        self.boss_active = False
-        self.boss_target = None  # "MARIO" o "LUIGI"
-        self.boss_timer = 0
+        self.boss.boss_active = False
 
     """
     PROPERTIES AND SETTERS SECTION
@@ -407,10 +406,10 @@ class Board:
                     else:
                         package.broken()
                         self.fails += 1
-                        if not self.boss_active:
-                            self.boss_active = True
-                            self.boss_target = "LUIGI"
-                            self.boss_timer = 60
+                        if not self.boss.boss_active:
+                            self.boss.boss_active = True
+                            self.boss.boss_target = "LUIGI"
+                            self.boss.boss_timer = 60
 
                 elif package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
@@ -420,15 +419,15 @@ class Board:
                         This is here in order to change the sprite, but we
                         need to make it so it is animated, not just a 1 frame
                         change
-                        """ 
+                        """
                         self.mario.has_package = True
                     else:
                         package.broken()
                         self.fails += 1
-                        if not self.boss_active:
-                            self.boss_active = True
-                            self.boss_target = "MARIO"
-                            self.boss_timer = 60       # 1 sec at 60 fps
+                        if not self.boss.boss_active:
+                            self.boss.boss_active = True
+                            self.boss.boss_target = "MARIO"
+                            self.boss.boss_timer = 60       # 1 sec at 60 fps
 
                 else:
                     if package.level == self.luigi.level * 2 + 1:
@@ -438,10 +437,10 @@ class Board:
                     else:
                         package.broken()
                         self.fails += 1
-                        if not self.boss_active:
-                            self.boss_active = True
-                            self.boss_target = "LUIGI"
-                            self.boss_timer = 60 
+                        if not self.boss.boss_active:
+                            self.boss.boss_active = True
+                            self.boss.boss_target = "LUIGI"
+                            self.boss.boss_timer = 60
             else:
                 """
                 This is in order to reestablish the default sprite.
@@ -463,7 +462,7 @@ class Board:
 
         # Start delivery (this sets state = "DELIVERY" and stores frame)
         self.truck.start_delivery()
-        
+
         # Characters rest (later use this for rest animation)
         self.mario.has_package = False
         self.luigi.has_package = False
@@ -483,11 +482,30 @@ class Board:
         for pkg in to_remove:
             self.packages.remove(pkg)
 
-        
+    def __boss_reprimand(self):
+        self.boss.boss_timer -= 1
+
+        if self.boss.boss_target == "MARIO":
+            self.mario.reprimand = True
+            self.luigi.reprimand = False
+
+        elif self.boss.boss_target == "LUIGI":
+            self.luigi.reprimand = True
+            self.mario.reprimand = False
+
+        if self.boss.boss_timer <= 0:
+            self.boss.boss_active = False
+            self.mario.reprimand = False
+            self.luigi.reprimand = False
+            self.boss.boss_timer = 0
 
     def game_is_over(self):
         self.game_over = True
         print("YOU'VE LOST!")
+
+    ###########################
+    # UPDATE and DRAW methods #
+    ###########################
 
     def update(self):
 
@@ -504,37 +522,23 @@ class Board:
                 self.luigi.resting = False
 
         # Boss reprimand
-        if self.boss_active:
-            self.boss_timer -= 1
-
-            if self.boss_target == "MARIO":
-                self.mario.reprimand = True
-                self.luigi.reprimand = False
-
-            elif self.boss_target == "LUIGI":
-                self.luigi.reprimand = True
-                self.mario.reprimand = False
-
-            if self.boss_timer <= 0:
-                self.boss_active = False
-                self.mario.reprimand = False
-                self.luigi.reprimand = False
-                self.boss_timer = 0
+        if self.boss.boss_active:
+            self.__boss_reprimand()
 
         # 3) Normal game update when not special events
-        if not self.truck.delivering and not self.boss_active:
+        if not self.truck.delivering and not self.boss.boss_active:
             self.mario.update(self.__number_of_conveyors)
             self.luigi.update(self.__number_of_conveyors)
 
             self.__package_gen()
             self.__package_update_all()
 
-            if self.truck.number_of_packages == 1:
+            if self.truck.number_of_packages % 1 == 0 and (
+                    not self.truck.number_of_packages == 0):
                 self.__truck_delivery()
 
             if self.fails == 3:
                 self.game_is_over()
-
 
     def draw(self):
 
@@ -558,17 +562,5 @@ class Board:
 
         self.top_menu()
 
-        if self.boss_active:
-            if self.boss_target == "LUIGI":
-                boss_x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION  # a la derecha de Luigi
-                boss_y = 3 * config.TILE_DIMENSION
-            else:  # "MARIO"
-                boss_x = config.WIDTH - 4 * config.TILE_DIMENSION  # a la izquierda de Mario/puerta
-                boss_y = 3 * config.TILE_DIMENSION
-
-            if pyxel.frame_count % 20 < 10:
-                sprite = config.BOSS_ARMS_UP
-            else:
-                sprite = config.BOSS_ARMS_DOWN
-
-            pyxel.blt(boss_x, boss_y, *sprite)
+        if self.boss.boss_active:
+            self.boss.draw()

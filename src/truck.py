@@ -45,43 +45,45 @@ class Truck:
 
     def start_delivery(self):
         self.state = "DELIVERY"
+        self.delivering = True
         self.delivery_start_frame = pyxel.frame_count
 
     def delivery_done(self, duration_frames=180) -> bool:
         if self.delivery_start_frame is None:
             return False
         return pyxel.frame_count - self.delivery_start_frame >= duration_frames
-    
+
     def finish_delivery(self):
         self.state = "LOADING"
         self.delivery_start_frame = None
         self.delivering = False
         self.number_of_packages = 0
 
-
-
-
     def draw(self, level):
         """
         Draws the truck: fixed head, variable bed based on number_of_packages.
         """
         # Draw truck head at fixed position (adjust x, y as needed)
-        pyxel.blt(
-            8,
-            12*config.TILE_DIMENSION - level*config.TILE_DIMENSION + 4,
-            *config.TRUCK_HEAD
-        )
-        # Draw beds/cargo
-        pyxel.blt(
-            8 + config.TILE_DIMENSION,
-            12*config.TILE_DIMENSION - level*config.TILE_DIMENSION + 4,
-            *config.TRUCK_BED[self.number_of_packages]
-        )
+        if not self.delivering:
+            pyxel.blt(
+                8,
+                12*config.TILE_DIMENSION - level*config.TILE_DIMENSION + 4,
+                *config.TRUCK_HEAD
+            )
+            # Draw beds/cargo
+            pyxel.blt(
+                8 + config.TILE_DIMENSION,
+                12*config.TILE_DIMENSION - level*config.TILE_DIMENSION + 4,
+                *config.TRUCK_BED[self.number_of_packages]
+            )
+
         # Draw structure arround
         for i in range(4):
-            pyxel.blt(i * 8,
-                      12*config.TILE_DIMENSION - level*config.TILE_DIMENSION+8,
-                      *config.HOR_HALF_PIPE)
-        pyxel.blt(4 * 8,
-                  12*config.TILE_DIMENSION - level * config.TILE_DIMENSION+8,
-                  *config.L_PIPE)
+            pyxel.blt(
+                i * 8,
+                12*config.TILE_DIMENSION - level*config.TILE_DIMENSION+8,
+                *config.HOR_HALF_PIPE)
+        pyxel.blt(
+            4 * 8,
+            12*config.TILE_DIMENSION - level * config.TILE_DIMENSION+8,
+            *config.L_PIPE)

@@ -26,6 +26,8 @@ class Character:
 
         self.__sprite_frame_count = -1
         self.reprimand = False
+        self.boss_target = "NONE"
+        self.boss_timer = 0
 
     # level property
     @property
@@ -68,58 +70,79 @@ class Character:
         else:
             self.__character = character
 
+    @property
+    def boss_target(self):
+        """The boss_target property."""
+        return self.__boss_target
+
+    @boss_target.setter
+    def boss_target(self, value):
+        if not isinstance(value, str):
+            raise TypeError("'boss_target' must be a string")
+        elif value not in ("MARIO", "LUIGI", "NONE"):
+            raise ValueError("'boss_target' must be Mario or Luigi")
+        else:
+            self.__boss_target = value
+
+    @property
+    def boss_timer(self):
+        """The boss_timer property."""
+        return self.__boss_timer
+
+    @boss_timer.setter
+    def boss_timer(self, value):
+        if not isinstance(value, int):
+            raise TypeError("'boss_timer' must be a string")
+        else:
+            self.__boss_timer = value
+
     def __sprite_decide(self):
         """
-        Method for deciding the sprite.
+        Method for deciding the self.__sprite.
 
         It depends on the level the character has and wheather he is holding
         package or not.
         """
-        if self.resting:
-            if self.character == "MARIO":
-                self.__sprite = config.MARIO_REST
-            elif self.character == "LUIGI":
-                self.__sprite = config.LUIGI_REST
-        
-        elif self.reprimand:
-            if self.character == "MARIO":
-                self.__x = config.WIDTH - 3 * config.TILE_DIMENSION
-                self.__y = 9 * config.TILE_DIMENSION
+
+        if self.character == "MARIO":
+            self.__x = 12*config.TILE_DIMENSION-config.TILE_DIMENSION//2
+            self.__y = 10*config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+
+            if self.level == 0:
+                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                    self.__sprite = config.MARIO_PACKAGE_FLIPPED
+                    self.__sprite_frame_count += 1
+                else:
+                    self.__sprite = config.MARIO_DEF_RIGHT
+                    self.__sprite_frame_count = -1
+            elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                self.__sprite = config.MARIO_PACKAGE
+                self.__sprite_frame_count += 1
+            else:
+                self.__sprite = config.MARIO_DEF_LEFT
+                self.__sprite_frame_count = -1
+
+            if self.reprimand:
                 self.__sprite = config.MARIO_REPRIMAND
-            elif self.character == "LUIGI":
-                self.__x = 2 * config.TILE_DIMENSION
-                self.__y = 9 * config.TILE_DIMENSION
+
+            if self.resting:
+                self.__sprite = config.MARIO_REST
+
+        if self.character == "LUIGI":
+            self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
+            self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
+            if self.has_package or 0 <= self.__sprite_frame_count <= 30:
+                self.__sprite = config.LUIGI_PACKAGE
+                self.__sprite_frame_count += 1
+            else:
+                self.__sprite = config.LUIGI_DEF_RIGHT
+                self.__sprite_frame_count = -1
+
+            if self.reprimand:
                 self.__sprite = config.LUIGI_REPRIMAND
 
-        else:
-            if self.character == "MARIO":
-                self.__x = 12 * config.TILE_DIMENSION-config.TILE_DIMENSION//2
-                self.__y = 10 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-                if self.level == 0:
-                    if self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                        self.__sprite = config.MARIO_PACKAGE_FLIPPED
-                        self.__sprite_frame_count += 1
-                    else:
-                        self.__sprite = config.MARIO_DEF_RIGHT
-                        self.__sprite_frame_count = -1
-                elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                    self.__sprite = config.MARIO_PACKAGE
-                    self.__sprite_frame_count += 1
-                else:
-                    self.__sprite = config.MARIO_DEF_LEFT
-                    self.__sprite_frame_count = -1
-
-            if self.character == "LUIGI":
-                self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
-                self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                    self.__sprite = config.LUIGI_PACKAGE
-                    self.__sprite_frame_count += 1
-                else:
-                    self.__sprite = config.LUIGI_DEF_RIGHT
-                    self.__sprite_frame_count = -1
-
-        
+            if self.resting:
+                self.__sprite = config.LUIGI_REST
 
     def update(self, max_level):
         """Update method for character class."""
@@ -141,6 +164,20 @@ class Character:
 
     def draw(self):
         """Draw method for character class."""
-        self.__sprite_decide()
+        if self.character == "BOSS":
+            if self.boss_target == "LUIGI":
+                self.__x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION
+                self.__y = 3 * config.TILE_DIMENSION
+            else:  # "MARIO"
+                self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
+                self.__y = 3 * config.TILE_DIMENSION
+
+            if pyxel.frame_count % 20 < 10:
+                self.__sprite = config.BOSS_ARMS_UP
+            else:
+                self.__sprite = config.BOSS_ARMS_DOWN
+        else:
+            self.__sprite_decide()
+
         pyxel.blt(self.__x, self.__y - 2*self.level*config.TILE_DIMENSION,
                   *self.__sprite, scale=1.3)
