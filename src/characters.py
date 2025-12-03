@@ -144,6 +144,19 @@ class Character:
             if self.resting:
                 self.__sprite = config.LUIGI_REST
 
+        if self.character == "BOSS":
+            if self.boss_target == "LUIGI":
+                self.__x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION
+                self.__y = 3 * config.TILE_DIMENSION
+            else:  # "MARIO"
+                self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
+                self.__y = 3 * config.TILE_DIMENSION
+
+            if pyxel.frame_count % 20 < 10:
+                self.__sprite = config.BOSS_ARMS_UP_INVERTED
+            else:
+                self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
+
     def update(self, max_level):
         """Update method for character class."""
 
@@ -160,24 +173,10 @@ class Character:
             if pyxel.btnp(down_key) and 0 < self.level:
                 self.level -= 1
 
-            self.__sprite_decide()
+            # self.__sprite_decide()
 
     def draw(self):
         """Draw method for character class."""
-        if self.character == "BOSS":
-            if self.boss_target == "LUIGI":
-                self.__x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION
-                self.__y = 3 * config.TILE_DIMENSION
-            else:  # "MARIO"
-                self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
-                self.__y = 3 * config.TILE_DIMENSION
-
-            if pyxel.frame_count % 20 < 10:
-                self.__sprite = config.BOSS_ARMS_UP
-            else:
-                self.__sprite = config.BOSS_ARMS_DOWN
-        else:
-            self.__sprite_decide()
-
+        self.__sprite_decide()
         pyxel.blt(self.__x, self.__y - 2*self.level*config.TILE_DIMENSION,
                   *self.__sprite, scale=1.3)

@@ -533,7 +533,7 @@ class Board:
             self.__package_gen()
             self.__package_update_all()
 
-            if self.truck.number_of_packages % 1 == 0 and (
+            if self.truck.number_of_packages % 8 == 0 and (
                     not self.truck.number_of_packages == 0):
                 self.__truck_delivery()
 
