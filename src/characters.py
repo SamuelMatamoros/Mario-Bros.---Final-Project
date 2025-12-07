@@ -160,20 +160,24 @@ class Character:
 
         if self.character == "BOSS":
             if self.boss_target == "LUIGI":
-                self.__x = 2 * config.TILE_DIMENSION + config.TILE_DIMENSION
-                self.__y = 3 * config.TILE_DIMENSION
+                self.__x = 1.5 * config.TILE_DIMENSION
+                self.__y = 8 * config.TILE_DIMENSION
+                self.__sprite = config.BOSS_ARMS_DOWN
+                prev_sprite = config.BOSS_ARMS_UP
             else:
                 self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
                 self.__y = 3 * config.TILE_DIMENSION
+                self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
+                prev_sprite = config.BOSS_ARMS_UP_INVERTED
 
             if self.boss_target == "BOTH":
                 self.__x = config.WIDTH - 2*config.TILE_DIMENSION
                 self.__y = config.HEIGHT - 3.5*config.TILE_DIMENSION
+                self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
+                prev_sprite = config.BOSS_ARMS_UP_INVERTED
 
             if pyxel.frame_count % 20 < 10:
-                self.__sprite = config.BOSS_ARMS_UP_INVERTED
-            else:
-                self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
+                self.__sprite, prev_sprite = prev_sprite, self.__sprite
 
     def update(self, max_level):
         """Update method for character class."""
@@ -190,8 +194,6 @@ class Character:
                 self.level += 1
             if pyxel.btnp(down_key) and 0 < self.level:
                 self.level -= 1
-
-            # self.__sprite_decide()
 
     def draw(self):
         """Draw method for character class."""

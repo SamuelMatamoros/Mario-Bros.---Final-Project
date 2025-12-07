@@ -21,29 +21,17 @@ class Board:
         Method that creates the board.
         """
 
-        # Attributes
+        # Starting Attributes
+        self.game_start = True
+
         self.difficulty = 0
-        self.__previous_difficulty = -1
-        self.last_score_for_spawn = -1
+        self.high_score = 0
 
-        self.score = 0
-        self.fails = 0
+        self.game_restart()
 
-        self.menu_active = False
-        self.__menu_selected = self.difficulty
-        self.game_over = False
-
-        self.mario = Character("MARIO")
-        self.luigi = Character("LUIGI")
-        self.boss = Character("BOSS")
-
-        self.truck = Truck()
-
-        self.boss.boss_active = False
-
-    """
-    PROPERTIES AND SETTERS SECTION
-    """
+    # **************************************** #
+    # **** PROPERTIES AND SETTERS SECTION **** #
+    # **************************************** #
 
     @property
     def difficulty(self):
@@ -93,15 +81,27 @@ class Board:
         return self.__game_over
 
     @game_over.setter
-    def game_over(self, value):
-        if not isinstance(value, bool):
+    def game_over(self, game_over):
+        if not isinstance(game_over, bool):
             raise TypeError("game_over must be a bool")
         else:
-            self.__game_over = value
+            self.__game_over = game_over
 
-    """
-    METHODS SECTION
-    """
+    @property
+    def game_start(self):
+        """The game_start property"""
+        return self.__game_start
+
+    @game_start.setter
+    def game_start(self, game_start):
+        if not isinstance(game_start, bool):
+            raise TypeError("game_start must be a bool")
+        else:
+            self.__game_start = game_start
+
+    # ****************************** #
+    # ****** METHODS SECTION ******* #
+    # ****************************** #
 
     ################
     # MENU SECTION #
@@ -117,8 +117,10 @@ class Board:
         if pyxel.btnp(pyxel.KEY_M):
             if self.menu_active:
                 self.menu_active = False
+                self.exec_halt = False
             else:
                 self.menu_active = True
+                self.exec_halt = True
         if self.menu_active:
             if pyxel.btnp(pyxel.KEY_UP) and self.__menu_selected > 0:
                 self.__menu_selected -= 1
@@ -130,6 +132,7 @@ class Board:
                 # confirming the difficulty
                 # self.__menu_selected = 0
                 self.menu_active = False
+                self.exec_halt = False
 
     def menu_draw(self):
         """
@@ -499,9 +502,72 @@ class Board:
             self.luigi.reprimand = False
             self.boss.boss_timer = 0
 
-    def game_is_over(self):
+    def game_restart(self):
+        """
+        Method for restarting the game.
+
+        When invoked, the game logic will be restarted.
+        Called when:
+            - Game starts
+            - Game Over
+            - Player restart
+
+        Only thing to keep out is high_score
+        """
+        self.__previous_difficulty = -1
+        self.last_score_for_spawn = -1
+
+        self.score = 0
+        self.fails = 0
+
+        self.menu_active = False
+        self.__menu_selected = self.difficulty
+
+        self.game_over = False
+
+        self.exec_halt = False
+
+        self.mario = Character("MARIO")
+        self.luigi = Character("LUIGI")
+        self.boss = Character("BOSS")
+        self.truck = Truck()
+
+    def game_start_update(self):
+        self.exec_halt = True
+        if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
+            self.game_start = False
+            self.game_restart()
+
+    def game_start_draw(self):
+        pyxel.dither(0.6)
+        pyxel.rect(0, 0, config.WIDTH, config.HEIGHT, 1)
+        pyxel.dither(1)
+        pyxel.rect(32, 32,
+                   config.WIDTH - 4*config.TILE_DIMENSION,
+                   config.HEIGHT - 4*config.TILE_DIMENSION, 9)
+        pyxel.rectb(32, 32,
+                    config.WIDTH - 4*config.TILE_DIMENSION,
+                    config.HEIGHT - 4*config.TILE_DIMENSION, 3)
+        pyxel.rectb(32 + 1, 32 + 1,
+                    config.WIDTH - 4*config.TILE_DIMENSION - 1,
+                    config.HEIGHT - 4*config.TILE_DIMENSION - 1, 3)
+        pyxel.blt(config.WIDTH/2 - 62,
+                  config.HEIGHT/2 - 52,
+                  *config.START_SCREEN)
+
+    def game_over_update(self):
         self.game_over = True
-        print("YOU'VE LOST!")
+        self.exec_halt = True
+        # TODO: Draw the game over screen with option to restart
+
+        if pyxel.btnp(pyxel.KEY_RETURN):
+            self.game_restart()
+
+    def game_over_draw(self):
+        pyxel.dither(0.6)
+        pyxel.rect(0, 0, config.WIDTH, config.HEIGHT, 1)
+        pyxel.dither(1)
+        pyxel.blt(64, 64, *config.GAME_OVER)
 
     ###########################
     # UPDATE and DRAW methods #
@@ -541,14 +607,14 @@ class Board:
                 self.__truck_delivery()
 
             if self.fails == 3:
-                self.game_is_over()
+                self.game_over = True
 
     def draw(self):
 
         # self.tests(self, tiles=True, level=True)
 
         for conveyor in self.conveyors:
-            conveyor.draw(self.game_over)
+            conveyor.draw(self.exec_halt)
 
         for package in self.packages:
             package.draw()
