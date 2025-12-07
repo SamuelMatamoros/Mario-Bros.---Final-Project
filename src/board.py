@@ -250,6 +250,8 @@ class Board:
         self.number_of_packages = 1
         self.__points_for_package = 50
         self.__number_of_deliveries = 0
+        self.__eliminates_fails = True
+        self.__deliveries_to_delete_fail = 3
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
@@ -270,6 +272,8 @@ class Board:
         self.number_of_packages = 1
         self.__points_for_package = 30
         self.__number_of_deliveries = 0
+        self.__eliminates_fails = True
+        self.__deliveries_to_delete_fail = 5
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
@@ -290,6 +294,8 @@ class Board:
         self.number_of_packages = 1
         self.__points_for_package = 30
         self.__number_of_deliveries = 0
+        self.__eliminates_fails = True
+        self.__deliveries_to_delete_fail = 5
 
         for i in range(self.number_of_packages):
             self.packages.append(Package("CONVEYOR"))
@@ -307,8 +313,10 @@ class Board:
         self.packages = []
 
         self.number_of_packages = 1
-        self.__points_for_package = 50
+        self.__points_for_package = 20
         self.__number_of_deliveries = 0
+        self.__eliminates_fails = False
+        self.__deliveries_to_delete_fail = 0
 
     # DRAWINGS SECTION #
 
@@ -386,9 +394,14 @@ class Board:
         """
         Method for package generation.
         """
+        self.number_of_packages = 1 + self.score // self.__points_for_package
+
         if len(self.packages) == 0:
             self.packages.append(Package("CONVEYOR"))
-            self.last_score_for_spawn = self.score
+
+        if (len(self.packages) < self.number_of_packages and
+                pyxel.frame_count % 600 == 0):
+            self.packages.append(Package("CONVEYOR"))
 
     def __package_update_all(self):
         """
@@ -463,9 +476,6 @@ class Board:
             if package.state == "BROKEN" or package.state == "TRUCK":
                 self.packages.remove(package)
 
-            if self.high_score < self.score:
-                self.high_score = self.score
-
     def __truck_delivery(self):
         """
         Here we put the logic for when the truck is full:
@@ -497,6 +507,13 @@ class Board:
         for pkg in to_remove:
             self.packages.remove(pkg)
 
+        # Eliminate fails if possible
+        if (self.__eliminates_fails and self.__number_of_deliveries %
+                self.__deliveries_to_delete_fail == 0 and
+                self.__number_of_deliveries != 0 and
+                self.fails > 0):
+            self.fails -= 1
+
     def __boss_reprimand(self):
         self.boss.boss_timer -= 1
 
@@ -527,7 +544,6 @@ class Board:
         Only thing to keep out is high_score
         """
         self.__previous_difficulty = -1
-        self.last_score_for_spawn = -1
 
         self.score = 0
         self.fails = 0
@@ -598,6 +614,13 @@ class Board:
                    config.HEIGHT/2 + 48,
                    "<ENTER>", 3)
 
+    def __manage_score(self):
+        """
+        Method for managing score updates and deliveries.
+        """
+        if self.high_score < self.score:
+            self.high_score = self.score
+
     # UPDATE and DRAW methods #
 
     def update(self):
@@ -628,6 +651,8 @@ class Board:
 
             self.__package_gen()
             self.__package_update_all()
+
+            self.__manage_score()
 
             if self.truck.number_of_packages % 8 == 0 and (
                     not self.truck.number_of_packages == 0):
