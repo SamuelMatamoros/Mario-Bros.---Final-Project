@@ -19,7 +19,7 @@ class Main:
                    capture_sec=0)
         pyxel.load("../assets/assets.pyxres")
         pyxel.images[2].load(0, 0, "../assets/game_over.png")
-        pyxel.images[2].load(0, 64, "../assets/start.png")
+        pyxel.images[2].load(0, 128, "../assets/start_alt.png")
         self.board = Board()
 
         pyxel.run(self.update, self.draw)

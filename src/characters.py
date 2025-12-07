@@ -165,8 +165,8 @@ class Character:
                 self.__sprite = config.BOSS_ARMS_DOWN
                 prev_sprite = config.BOSS_ARMS_UP
             else:
-                self.__x = config.WIDTH - 4 * config.TILE_DIMENSION
-                self.__y = 3 * config.TILE_DIMENSION
+                self.__x = config.WIDTH - 2*config.TILE_DIMENSION
+                self.__y = config.HEIGHT - 3.5*config.TILE_DIMENSION
                 self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
                 prev_sprite = config.BOSS_ARMS_UP_INVERTED
 

@@ -1,3 +1,4 @@
+# IMPORTS #
 # import time
 import random
 import pyxel
@@ -103,9 +104,7 @@ class Board:
     # ****** METHODS SECTION ******* #
     # ****************************** #
 
-    ################
     # MENU SECTION #
-    ################
 
     def menu_update(self):
         """
@@ -187,15 +186,27 @@ class Board:
         pyxel.text(config.WIDTH - 1.5*config.TILE_DIMENSION + 1,
                    text_y, "MENU", text_col)
 
-        pyxel.text(4*config.TILE_DIMENSION + 1,
+        pyxel.text(2*config.TILE_DIMENSION + 4,
                    text_y, f"SCORE: {self.score}", text_col)
 
-        pyxel.text(10*config.TILE_DIMENSION + 1,
+        pyxel.text(4.5*config.TILE_DIMENSION + 4,
                    text_y, f"FAILS: {self.fails}", text_col)
 
-    ######################
+        pyxel.text(8.5*config.TILE_DIMENSION + 4,
+                   text_y, f"HIGH: {self.high_score}", text_col)
+
+        if self.difficulty == 0:
+            diff = "EASY"
+        elif self.difficulty == 1:
+            diff = "MEDIUM"
+        elif self.difficulty == 2:
+            diff = "HARD"
+        else:
+            diff = "EXTREME"
+        pyxel.text(11*config.TILE_DIMENSION - 2,
+                   text_y, f"LEVEL: {diff}", text_col)
+
     # DIFFICULTY SECTION #
-    ######################
 
     @staticmethod
     def __check_difficulty(self):
@@ -216,6 +227,8 @@ class Board:
             self.packages = []
             self.truck.number_of_packages = 0
             self.__previous_difficulty = self.difficulty
+            self.score = 0
+            self.fails = 0
 
             if self.difficulty == 0:
                 self.difficulty0()
@@ -297,9 +310,7 @@ class Board:
         self.__points_for_package = 50
         self.__number_of_deliveries = 0
 
-    ####################
     # DRAWINGS SECTION #
-    ####################
 
     @staticmethod
     def tests(self,
@@ -367,11 +378,9 @@ class Board:
                         config.HEIGHT - (i+1)*config.TILE_DIMENSION,
                         *config.HOR_HALF_PIPE)
 
-    ########################
     # UPDATE LOGIC SECTION #
-    ########################
 
-    # # Packages
+    # Packages
 
     def __package_gen(self):
         """
@@ -454,6 +463,9 @@ class Board:
             if package.state == "BROKEN" or package.state == "TRUCK":
                 self.packages.remove(package)
 
+            if self.high_score < self.score:
+                self.high_score = self.score
+
     def __truck_delivery(self):
         """
         Here we put the logic for when the truck is full:
@@ -477,10 +489,10 @@ class Board:
         self.luigi.has_package = False
 
         # Remove packages at the last conveyor end
-        last_level = self.__number_of_conveyors - 1
         to_remove = []
         for pkg in self.packages:
-            if pkg.level == last_level and pkg.at_the_end():
+            # if pkg.level == last_level and pkg.at_the_end():
+            if pkg.at_the_end():
                 to_remove.append(pkg)
         for pkg in to_remove:
             self.packages.remove(pkg)
@@ -551,9 +563,12 @@ class Board:
         pyxel.rectb(32 + 1, 32 + 1,
                     config.WIDTH - 4*config.TILE_DIMENSION - 1,
                     config.HEIGHT - 4*config.TILE_DIMENSION - 1, 3)
-        pyxel.blt(config.WIDTH/2 - 62,
-                  config.HEIGHT/2 - 52,
+        pyxel.blt(config.WIDTH/2 - 100,
+                  config.HEIGHT/2 - 60,
                   *config.START_SCREEN)
+        pyxel.text(config.WIDTH/2 - 12,
+                   config.HEIGHT/2 + 48,
+                   "<ENTER>", 3)
 
     def game_over_update(self):
         self.game_over = True
@@ -567,11 +582,23 @@ class Board:
         pyxel.dither(0.6)
         pyxel.rect(0, 0, config.WIDTH, config.HEIGHT, 1)
         pyxel.dither(1)
-        pyxel.blt(64, 64, *config.GAME_OVER)
+        pyxel.rect(32, 32,
+                   config.WIDTH - 4*config.TILE_DIMENSION,
+                   config.HEIGHT - 4*config.TILE_DIMENSION, 9)
+        pyxel.rectb(32, 32,
+                    config.WIDTH - 4*config.TILE_DIMENSION,
+                    config.HEIGHT - 4*config.TILE_DIMENSION, 3)
+        pyxel.rectb(32 + 1, 32 + 1,
+                    config.WIDTH - 4*config.TILE_DIMENSION - 1,
+                    config.HEIGHT - 4*config.TILE_DIMENSION - 1, 3)
+        pyxel.blt(config.WIDTH/2 - 96,
+                  config.HEIGHT/2 - 64,
+                  *config.GAME_OVER)
+        pyxel.text(config.WIDTH/2 - 12,
+                   config.HEIGHT/2 + 48,
+                   "<ENTER>", 3)
 
-    ###########################
     # UPDATE and DRAW methods #
-    ###########################
 
     def update(self):
 
@@ -602,12 +629,13 @@ class Board:
             self.__package_gen()
             self.__package_update_all()
 
-            if self.truck.number_of_packages % 1 == 0 and (
+            if self.truck.number_of_packages % 8 == 0 and (
                     not self.truck.number_of_packages == 0):
                 self.__truck_delivery()
 
             if self.fails == 3:
                 self.game_over = True
+                self.exec_halt = True
 
     def draw(self):
 

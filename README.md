@@ -97,18 +97,18 @@ Please be sure to have the requirements installed before you run any of the code
 ### Sprint 5: Difficulty levels and final adjustments (optional)
 
 - [ ] Incorporate the difficulty levels (Easy, Medium, Extreme, Crazy) according to the rule table:
-	- [ ] Conveyor belt speed.
+	- [x] Conveyor belt speed.
 	- [ ] Minimum number of packages in play.
 	- [ ] Failure elimination rules for truck delivery.
-- [ ] Adjust the interface to display the current level.
-- [ ] Allow changing the level from the menu or before starting the game.
+- [x] Adjust the interface to display the current level.
+- [x] Allow changing the level from the menu or before starting the game.
 - [ ] Add optional sound effects: conveyor belt movement, error sounds, etc.
-- [ ] Implement high score tables or local competitive mode
+- [x] Implement high score tables or local competitive mode
 
 ### Extra functionality (ultra optional)
 
 - [x] Incorporate menu for changing difficulty.
-- [ ] Incorporate welcoming screen/start menu (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play).
+- [x] Incorporate welcoming screen/start menu (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play).
 
 ## Sources and relevant links
 
