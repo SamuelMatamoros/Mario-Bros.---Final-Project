@@ -123,8 +123,10 @@ class Board:
         if self.menu_active:
             if pyxel.btnp(pyxel.KEY_UP) and self.__menu_selected > 0:
                 self.__menu_selected -= 1
+                pyxel.play(3, 21)
             if pyxel.btnp(pyxel.KEY_DOWN) and self.__menu_selected < 3:
                 self.__menu_selected += 1
+                pyxel.play(3, 21)
             if pyxel.btnp(pyxel.KEY_RETURN):
                 self.difficulty = self.__menu_selected
                 # The line below resets the position of the menu after
@@ -132,6 +134,7 @@ class Board:
                 # self.__menu_selected = 0
                 self.menu_active = False
                 self.exec_halt = False
+                pyxel.play(3, 18)
 
     def menu_draw(self):
         """
@@ -396,12 +399,11 @@ class Board:
         """
         self.number_of_packages = 1 + self.score // self.__points_for_package
 
-        if len(self.packages) == 0:
+        if ((len(self.packages) < self.number_of_packages and
+                pyxel.frame_count % 600 == 0) or
+                (len(self.packages) == 0)):
             self.packages.append(Package("CONVEYOR"))
-
-        if (len(self.packages) < self.number_of_packages and
-                pyxel.frame_count % 600 == 0):
-            self.packages.append(Package("CONVEYOR"))
+            pyxel.play(3, 18)
 
     def __package_update_all(self):
         """
@@ -565,6 +567,7 @@ class Board:
         if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
             self.game_start = False
             self.game_restart()
+            pyxel.play(3, 18)
 
     def game_start_draw(self):
         pyxel.dither(0.6)
@@ -593,6 +596,7 @@ class Board:
 
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.game_restart()
+            pyxel.play(3, 18)
 
     def game_over_draw(self):
         pyxel.dither(0.6)

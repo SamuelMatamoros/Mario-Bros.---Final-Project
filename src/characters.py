@@ -192,8 +192,10 @@ class Character:
 
             if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
                 self.level += 1
+                pyxel.play(3, 16)
             if pyxel.btnp(down_key) and 0 < self.level:
                 self.level -= 1
+                pyxel.play(3, 17)
 
     def draw(self):
         """Draw method for character class."""

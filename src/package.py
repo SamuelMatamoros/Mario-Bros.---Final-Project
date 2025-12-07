@@ -88,6 +88,7 @@ class Package:
         """
         self.__at_the_end = False
         self.state = "BROKEN"
+        pyxel.play(3, 19)
 
     def move_to_next_conveyor(self):
         """
@@ -110,6 +111,8 @@ class Package:
 
         if self.level <= 5:
             self.__crossed_pipe = False
+
+        pyxel.play(3, 20)
 
     def update(self):
         """
@@ -147,6 +150,8 @@ class Package:
                 elif (old_x < config.PIPE_X and self.x >= config.PIPE_X):
                     self.__pipe_passes = min(self.__pipe_passes + 1, 4)
                     self.__crossed_pipe = True
+
+            pyxel.play(2, 22)
 
     def draw(self):
         if self.state == "CONVEYOR":
