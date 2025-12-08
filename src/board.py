@@ -723,4 +723,4 @@ class Board:
         self.top_menu()
 
         if self.boss.boss_active:
-            self.boss.draw()
+            self.boss.draw(self.__number_of_conveyors)
