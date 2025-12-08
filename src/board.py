@@ -700,7 +700,7 @@ class Board:
 
     def draw(self):
 
-        self.tests(self, tiles=False, level=True)
+        # self.tests(self, tiles=False, level=True)
 
         for conveyor in self.conveyors:
             conveyor.draw(self.exec_halt)

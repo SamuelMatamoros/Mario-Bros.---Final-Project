@@ -102,7 +102,7 @@ Please be sure to have the requirements installed before you run any of the code
 	- [x] Failure elimination rules for truck delivery.
 - [x] Adjust the interface to display the current level.
 - [x] Allow changing the level from the menu or before starting the game.
-- [ ] Add optional sound effects: conveyor belt movement, error sounds, etc.
+- [x] Add optional sound effects: conveyor belt movement, error sounds, etc.
 - [x] Implement high score tables or local competitive mode
 
 ### Extra functionality (ultra optional)
