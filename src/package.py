@@ -81,15 +81,17 @@ class Package:
         """Method that returns True if the package is at the end"""
         return self.__at_the_end
 
-    def broken(self):
+    def broken(self, sound):
         """
         Method executed when a package is at the end but the character
         is not.
         """
         self.__at_the_end = False
         self.state = "BROKEN"
+        if sound:
+            pyxel.play(3, 19)
 
-    def move_to_next_conveyor(self):
+    def move_to_next_conveyor(self, sound):
         """
         Method that moves the package to the next level.
         """
@@ -111,7 +113,10 @@ class Package:
         if self.level <= 5:
             self.__crossed_pipe = False
 
-    def update(self):
+        if sound:
+            pyxel.play(3, 20)
+
+    def update(self, sound):
         """
         update method for package class
         """
@@ -147,6 +152,9 @@ class Package:
                 elif (old_x < config.PIPE_X and self.x >= config.PIPE_X):
                     self.__pipe_passes = min(self.__pipe_passes + 1, 4)
                     self.__crossed_pipe = True
+
+            if sound:
+                pyxel.play(2, 22)
 
     def draw(self):
         if self.state == "CONVEYOR":
