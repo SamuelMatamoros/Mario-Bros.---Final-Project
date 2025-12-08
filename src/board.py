@@ -123,18 +123,27 @@ class Board:
         if self.menu_active:
             if pyxel.btnp(pyxel.KEY_UP) and self.__menu_selected > 0:
                 self.__menu_selected -= 1
-                pyxel.play(3, 21)
-            if pyxel.btnp(pyxel.KEY_DOWN) and self.__menu_selected < 3:
+                if self.__soundtrack:
+                    pyxel.play(3, 21)
+            if pyxel.btnp(pyxel.KEY_DOWN) and self.__menu_selected < 4:
                 self.__menu_selected += 1
-                pyxel.play(3, 21)
+                if self.__soundtrack:
+                    pyxel.play(3, 21)
             if pyxel.btnp(pyxel.KEY_RETURN):
-                self.difficulty = self.__menu_selected
-                # The line below resets the position of the menu after
-                # confirming the difficulty
-                # self.__menu_selected = 0
-                self.menu_active = False
-                self.exec_halt = False
-                pyxel.play(3, 18)
+                if 0 <= self.__menu_selected <= 3:
+                    self.difficulty = self.__menu_selected
+                    # The line below resets the position of the menu after
+                    # confirming the difficulty
+                    # self.__menu_selected = 0
+                    self.menu_active = False
+                    self.exec_halt = False
+                    if self.__soundtrack:
+                        pyxel.play(3, 18)
+                if self.__menu_selected == 4:
+                    if self.__soundtrack:
+                        self.__soundtrack = False
+                    else:
+                        self.__soundtrack = True
 
     def menu_draw(self):
         """
@@ -169,6 +178,17 @@ class Board:
                        config.HEIGHT//3 + i*16,
                        f"Difficulty {i}",
                        col)
+
+        if self.__menu_selected == 4:
+            pyxel.text(config.WIDTH//2 - 24,
+                       config.HEIGHT//3 + 64,
+                       f"SOUND: {str(self.__soundtrack).upper()}",
+                       11)
+        else:
+            pyxel.text(config.WIDTH//2 - 24,
+                       config.HEIGHT//3 + 64,
+                       f"SOUND: {str(self.__soundtrack).upper()}",
+                       3)
 
     def top_menu(self):
         """
@@ -363,9 +383,18 @@ class Board:
         pyxel.blt(config.WIDTH - 2*config.TILE_DIMENSION,
                   config.HEIGHT - 2*config.TILE_DIMENSION,
                   *config.MACHINE)
+
+    @staticmethod
+    def draw_doors():
         pyxel.blt(config.WIDTH - 1*config.TILE_DIMENSION,
                   config.HEIGHT - 3*config.TILE_DIMENSION,
                   *config.DOOR)
+        for i in range(4):
+            pyxel.blt(i*config.TILE_DIMENSION//2,
+                      config.HEIGHT - config.TILE_DIMENSION,
+                      *config.HOR_HALF_PIPE)
+        pyxel.blt(0, config.HEIGHT - 1*config.TILE_DIMENSION - 4,
+                  *config.DOOR_INVERTED)
 
     @staticmethod
     def draw_platforms(level):
@@ -403,7 +432,8 @@ class Board:
                 pyxel.frame_count % 600 == 0) or
                 (len(self.packages) == 0)):
             self.packages.append(Package("CONVEYOR"))
-            pyxel.play(3, 18)
+            if self.__soundtrack:
+                pyxel.play(3, 18)
 
     def __package_update_all(self):
         """
@@ -421,17 +451,17 @@ class Board:
             which the package is updated.
             """
             package.speed = self.conveyors[package.level].speed
-            package.update()
+            package.update(self.__soundtrack)
 
             if package.at_the_end():
                 if package.level == self.__number_of_conveyors - 1:
                     if package.level == self.luigi.level * 2 + 1:
-                        self.luigi.has_package = False
+                        self.luigi.has_package = True
                         self.truck.number_of_packages += 1
                         self.score += 1
                         package.state = "TRUCK"
                     else:
-                        package.broken()
+                        package.broken(self.__soundtrack)
                         self.fails += 1
                         if not self.boss.boss_active:
                             self.boss.boss_active = True
@@ -440,7 +470,7 @@ class Board:
 
                 elif package.level % 2 == 0:
                     if package.level == self.mario.level * 2:
-                        package.move_to_next_conveyor()
+                        package.move_to_next_conveyor(self.__soundtrack)
                         self.score += 1
                         """
                         This is here in order to change the sprite, but we
@@ -449,7 +479,7 @@ class Board:
                         """
                         self.mario.has_package = True
                     else:
-                        package.broken()
+                        package.broken(self.__soundtrack)
                         self.fails += 1
                         if not self.boss.boss_active:
                             self.boss.boss_active = True
@@ -458,11 +488,11 @@ class Board:
 
                 else:
                     if package.level == self.luigi.level * 2 + 1:
-                        package.move_to_next_conveyor()
+                        package.move_to_next_conveyor(self.__soundtrack)
                         self.score += 1
                         self.luigi.has_package = True
                     else:
-                        package.broken()
+                        package.broken(self.__soundtrack)
                         self.fails += 1
                         if not self.boss.boss_active:
                             self.boss.boss_active = True
@@ -523,7 +553,7 @@ class Board:
             self.mario.reprimand = True
             self.luigi.reprimand = False
 
-        elif self.boss.boss_target == "LUIGI":
+        if self.boss.boss_target == "LUIGI":
             self.luigi.reprimand = True
             self.mario.reprimand = False
 
@@ -552,6 +582,7 @@ class Board:
 
         self.menu_active = False
         self.__menu_selected = self.difficulty
+        self.__soundtrack = True
 
         self.game_over = False
 
@@ -567,7 +598,8 @@ class Board:
         if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
             self.game_start = False
             self.game_restart()
-            pyxel.play(3, 18)
+            if self.__soundtrack:
+                pyxel.play(3, 18)
 
     def game_start_draw(self):
         pyxel.dither(0.6)
@@ -592,11 +624,11 @@ class Board:
     def game_over_update(self):
         self.game_over = True
         self.exec_halt = True
-        # TODO: Draw the game over screen with option to restart
 
         if pyxel.btnp(pyxel.KEY_RETURN):
             self.game_restart()
-            pyxel.play(3, 18)
+            if self.__soundtrack:
+                pyxel.play(3, 18)
 
     def game_over_draw(self):
         pyxel.dither(0.6)
@@ -650,8 +682,8 @@ class Board:
 
         # 3) Normal game update when not special events
         if not self.truck.delivering and not self.boss.boss_active:
-            self.mario.update(self.__number_of_conveyors)
-            self.luigi.update(self.__number_of_conveyors)
+            self.mario.update(self.__number_of_conveyors, self.__soundtrack)
+            self.luigi.update(self.__number_of_conveyors, self.__soundtrack)
 
             self.__package_gen()
             self.__package_update_all()
@@ -668,7 +700,7 @@ class Board:
 
     def draw(self):
 
-        # self.tests(self, tiles=True, level=True)
+        self.tests(self, tiles=False, level=True)
 
         for conveyor in self.conveyors:
             conveyor.draw(self.exec_halt)
@@ -680,11 +712,12 @@ class Board:
 
         self.truck.draw(self.__number_of_conveyors)
 
-        self.mario.draw()
-        self.luigi.draw()
+        self.mario.draw(self.__number_of_conveyors)
+        self.luigi.draw(self.__number_of_conveyors)
 
         self.draw_pipe()
         self.draw_machine()
+        self.draw_doors()
 
         self.top_menu()
 

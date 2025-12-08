@@ -111,7 +111,7 @@ class Character:
         else:
             self.__boss_active = value
 
-    def __sprite_decide(self):
+    def __sprite_decide(self, max_level):
         """
         Method for deciding the self.__sprite.
 
@@ -121,15 +121,14 @@ class Character:
         if self.character == "MARIO":
             self.__x = 12*config.TILE_DIMENSION-config.TILE_DIMENSION//2
             self.__y = 10*config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-
             if self.level == 0:
-                if self.has_package or 0 <= self.__sprite_frame_count <= 30:
-                    self.__sprite = config.MARIO_PACKAGE_FLIPPED
+                if self.has_package or 0 <= self.__sprite_frame_count <= 10:
+                    self.__sprite = config.MARIO_PACKAGE
                     self.__sprite_frame_count += 1
                 else:
                     self.__sprite = config.MARIO_DEF_RIGHT
                     self.__sprite_frame_count = -1
-            elif self.has_package or 0 <= self.__sprite_frame_count <= 30:
+            elif self.has_package or 0 <= self.__sprite_frame_count <= 10:
                 self.__sprite = config.MARIO_PACKAGE
                 self.__sprite_frame_count += 1
             else:
@@ -145,7 +144,15 @@ class Character:
         if self.character == "LUIGI":
             self.__x = 4 * config.TILE_DIMENSION-config.TILE_DIMENSION//4
             self.__y = 9 * config.TILE_DIMENSION+config.TILE_DIMENSION//2+2
-            if self.has_package or 0 <= self.__sprite_frame_count <= 30:
+            if self.level == max_level//2 - 1:
+                if self.has_package or 0 <= self.__sprite_frame_count <= 10:
+                    self.__sprite = config.LUIGI_PACKAGE_INVERTED
+                    self.__sprite_frame_count += 1
+                    self.has_package = False
+                else:
+                    self.__sprite = config.LUIGI_DEF_RIGHT
+                    self.__sprite_frame_count = -1
+            elif self.has_package or 0 <= self.__sprite_frame_count <= 10:
                 self.__sprite = config.LUIGI_PACKAGE
                 self.__sprite_frame_count += 1
             else:
@@ -160,8 +167,8 @@ class Character:
 
         if self.character == "BOSS":
             if self.boss_target == "LUIGI":
-                self.__x = 1.5 * config.TILE_DIMENSION
-                self.__y = 8 * config.TILE_DIMENSION
+                self.__x = 1 * config.TILE_DIMENSION
+                self.__y = 10 * config.TILE_DIMENSION
                 self.__sprite = config.BOSS_ARMS_DOWN
                 prev_sprite = config.BOSS_ARMS_UP
             else:
@@ -179,7 +186,7 @@ class Character:
             if pyxel.frame_count % 20 < 10:
                 self.__sprite, prev_sprite = prev_sprite, self.__sprite
 
-    def update(self, max_level):
+    def update(self, max_level, sound):
         """Update method for character class."""
 
         if not (self.resting or self.reprimand):
@@ -192,13 +199,15 @@ class Character:
 
             if pyxel.btnp(up_key) and max_level//2 - 1 > self.level:
                 self.level += 1
-                pyxel.play(3, 16)
+                if sound:
+                    pyxel.play(3, 16)
             if pyxel.btnp(down_key) and 0 < self.level:
                 self.level -= 1
-                pyxel.play(3, 17)
+                if sound:
+                    pyxel.play(3, 17)
 
-    def draw(self):
+    def draw(self, max_level):
         """Draw method for character class."""
-        self.__sprite_decide()
+        self.__sprite_decide(max_level)
         pyxel.blt(self.__x, self.__y - 2*self.level*config.TILE_DIMENSION,
                   *self.__sprite, scale=1.3)
