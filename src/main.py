@@ -33,7 +33,8 @@ class Main:
         if not self.board.exec_halt:
             self.board.update()
 
-        self.board.menu_update()
+        if not self.board.game_start:
+            self.board.menu_update()
 
         if self.board.game_start:
             self.board.game_start_update()

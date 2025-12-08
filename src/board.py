@@ -681,12 +681,13 @@ class Board:
             self.__boss_reprimand()
 
         # 3) Normal game update when not special events
-        if not self.truck.delivering and not self.boss.boss_active:
+        if not self.exec_halt:
             self.mario.update(self.__number_of_conveyors, self.__soundtrack)
             self.luigi.update(self.__number_of_conveyors, self.__soundtrack)
 
-            self.__package_gen()
-            self.__package_update_all()
+            if not self.game_start:
+                self.__package_gen()
+                self.__package_update_all()
 
             self.__manage_score()
 
