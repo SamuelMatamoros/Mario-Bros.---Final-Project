@@ -24,7 +24,8 @@
   professor: "Ángel García Olaya & Martha del Toro",
   toc: true,
   logo: "new",
-  language: "en"
+  language: "en",
+  chapter_on_new_page: false
 )
 
 #set table(
@@ -54,15 +55,17 @@ Pyxel was selected as the main library because it provides a simple framework fo
 
 The project also aims to practice modular design by separating the code into classes such as Board, Character, Conveyor, Package and Truck, plus a configuration module config for constants and sprites.
 
-#v(1em)
-
 == Game description
 The game takes place in a factory where Mario and Luigi must move boxes along several conveyor belts to load them into a truck.
 The player controls each character's vertical position so they can catch and pass boxes in time, avoiding breaks; each delivered box increases the score, while each broken box increases the fail counter, and the game ends when three fails are reached.
 
+#v(1em)
+
 = Design and Architecture
 
 In this section we will discuss the different classes in which we have separated our game and the main functionality that resides in each of them. We will provide an overview of the methods and attributes along with the class diagram showing the relation between classes.
+
+#pagebreak()
 
 == Main
 Application entry point and integration with the Pyxel engine.
@@ -90,8 +93,6 @@ Central game controller. Manages state, difficulty, characters, conveyors, packa
     - difficulty0(), difficulty1(), difficulty2(), difficulty3() – Configure conveyors, speeds and scoring per difficulty
     - update() – Per‑frame logic: check difficulty, update truck delivery and boss punishment, and when no special state is active update characters, generate and move packages, and check game‑over.
     - draw() – Draw conveyors, packages, platforms, truck, characters, boss, and UI.
-
-#pagebreak()
 
 == Character
 Represents Mario or Luigi, with movement and sprite/animation.
@@ -233,7 +234,6 @@ In here we will explain the features that have been included in the game. We wil
     - \(_Extra:_\) change the sprite of Mario or Luigi.
 - Implement the automatic movement of packages based on the speed of the current level.
 
-#pagebreak()
 
 == Sprint 4: Scoring system, failures, and end of game
 
@@ -264,6 +264,7 @@ In here we will explain the features that have been included in the game. We wil
 - Incorporate menu for changing difficulty.
 - Incorporate welcoming screen/start menu (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play).
 
+#pagebreak()
 
 = User manual
 - Starting the game:
