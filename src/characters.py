@@ -168,18 +168,18 @@ class Character:
         if self.character == "BOSS":
             if self.boss_target == "LUIGI":
                 self.__x = 1 * config.TILE_DIMENSION
-                self.__y = 10 * config.TILE_DIMENSION
+                self.__y = 11 * config.TILE_DIMENSION - 6
                 self.__sprite = config.BOSS_ARMS_DOWN
                 prev_sprite = config.BOSS_ARMS_UP
             else:
                 self.__x = config.WIDTH - 2*config.TILE_DIMENSION
-                self.__y = config.HEIGHT - 3.5*config.TILE_DIMENSION
+                self.__y = config.HEIGHT - 3*config.TILE_DIMENSION - 2
                 self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
                 prev_sprite = config.BOSS_ARMS_UP_INVERTED
 
             if self.boss_target == "BOTH":
                 self.__x = config.WIDTH - 2*config.TILE_DIMENSION
-                self.__y = config.HEIGHT - 3.5*config.TILE_DIMENSION
+                self.__y = config.HEIGHT - 3*config.TILE_DIMENSION - 2
                 self.__sprite = config.BOSS_ARMS_DOWN_INVERTED
                 prev_sprite = config.BOSS_ARMS_UP_INVERTED
 

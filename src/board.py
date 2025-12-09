@@ -597,6 +597,7 @@ class Board:
         self.exec_halt = True
         if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
             self.game_start = False
+            self.menu_active = True
             self.game_restart()
             if self.__soundtrack:
                 pyxel.play(3, 18)
