@@ -5,10 +5,10 @@
   subject: "Programming",
   year: (24, 25),
   project: "Final Project",
-  title: "Mario Bros.",
+  title: "Bottle Bros.",
   group: 196,
-  bibliography-content: bibliography("bib.bib"),
-  appendixes: include "apendixes.typ",
+  // bibliography-content: bibliography("bib.bib"),
+  // appendixes: include "apendixes.typ",
   authors: (
     (
       name: "Samuel",
@@ -21,8 +21,7 @@
       nia: 100581710
     ),
   ),
-  // team: "Los chungitos",
-  professor: "Ángel García Olaya",
+  professor: "Ángel García Olaya & Martha del Toro",
   toc: true,
   logo: "new",
   language: "en"
@@ -42,21 +41,28 @@ This document describes the design and implementation of a 2D game inspired by N
 
 The report explains the main classes, core algorithms (movement, collision, state management), the development process and decisions taken, as well as the current functionality, missing features, and extra improvements added over the basic requirements.
 
+With this project we attempt to learn the fundamentals of Object-Oriented Programming and grasp the concepts necessary to develop our skills in coding and problem-solving.
+
 = Introduction
 
-The goal of this project was to design and implement a small but complete video game in Python, applying object-oriented programming, basic game loop structure and state management.
-The chosen concept is a recreation of the classic LCD Mario Bros. factory game: Mario and Luigi move boxes on conveyor belts to load a truck, while avoiding drops and handling increasing difficulty.
+The goal of this project was to design and implement a small but complete video game in Python, applying Object-Oriented Programming (OOP), basic game loop structure and state management.
+The chosen concept is a recreation of the classic LCD Mario Bros. 
+
+The game is set in a factory, Mario and Luigi move boxes between conveyor belts to load a truck, while avoiding drops and handling increasing difficulty.
 
 Pyxel was selected as the main library because it provides a simple framework for pixel-art games: screen management, sprites, keyboard input and a fixed-rate update/draw loop.
+
 The project also aims to practice modular design by separating the code into classes such as Board, Character, Conveyor, Package and Truck, plus a configuration module config for constants and sprites.
 
-#pagebreak()
+#v(1em)
 
 == Game description
 The game takes place in a factory where Mario and Luigi must move boxes along several conveyor belts to load them into a truck.
 The player controls each character's vertical position so they can catch and pass boxes in time, avoiding breaks; each delivered box increases the score, while each broken box increases the fail counter, and the game ends when three fails are reached.
 
 = Design and Architecture
+
+In this section we will discuss the different classes in which we have separated our game and the main functionality that resides in each of them. We will provide an overview of the methods and attributes along with the class diagram showing the relation between classes.
 
 == Main
 Application entry point and integration with the Pyxel engine.
@@ -65,7 +71,7 @@ Application entry point and integration with the Pyxel engine.
     - board: Board - Main game controller.
 
 - Most relevant methods:
-    - __init__() - Initializes Pyxel (window, FPS, resources) and creates the Board instance.
+    - \_\_init\_\_() - Initializes Pyxel (window, FPS, resources) and creates the Board instance.
     - update() – Called every frame by Pyxel; forwards to board.menu_update() and board.update() when the menu is not active and the game is not over.
     - draw() – Clears the screen, calls board.draw(), and, if needed, draws the menu or the game‑over image.
 
@@ -74,9 +80,9 @@ Central game controller. Manages state, difficulty, characters, conveyors, packa
 
 - Main Attributes:
     - Game state: difficulty, score, fails, game_over.
-    - UI state: menu_active, __menu_selected.
+    - UI state: menu_active, \_\_menu_selected.
     - Entities: mario: Character, luigi: Character, truck: Truck, conveyors: list[Conveyor], packages: list[Package].
-    - Difficulty / progression: __number_of_conveyors, __conveyor_speed, number_of_packages, __points_for_package, __number_of_deliveries.
+    - Difficulty / progression: \_\_number_of_conveyors, \_\_conveyor_speed, number_of_packages, \_\_points_for_package, \_\_number_of_deliveries.
     - Boss system: boss_active, boss_target, boss_timer.
 - Most relevant methods:
     - Boss system: boss_active, boss_target, boss_timer.
@@ -84,6 +90,8 @@ Central game controller. Manages state, difficulty, characters, conveyors, packa
     - difficulty0(), difficulty1(), difficulty2(), difficulty3() – Configure conveyors, speeds and scoring per difficulty
     - update() – Per‑frame logic: check difficulty, update truck delivery and boss punishment, and when no special state is active update characters, generate and move packages, and check game‑over.
     - draw() – Draw conveyors, packages, platforms, truck, characters, boss, and UI.
+
+#pagebreak()
 
 == Character
 Represents Mario or Luigi, with movement and sprite/animation.
@@ -95,7 +103,7 @@ Represents Mario or Luigi, with movement and sprite/animation.
     - resting: bool – True during truck deliveries.
     - reprimand: bool – True when being punished by the boss.
 - Most relevant methods:
-    - __init__(character: str) – Initialize character type and default state.
+    - \_\_init\_\_(character: str) – Initialize character type and default state.
     - update(max_level: int) – Handle input (different keys for Mario and Luigi) and change level when not resting or reprimanded; update animation state.
     - draw() – Draw character sprite on screen according to level and current state.
 
@@ -106,7 +114,7 @@ Represents a conveyor belt with a given speed.
     - level: int – Conveyor index/height-
     - speed: float – Movement speed for packages on this belt.
 - Most relevant methods:
-    - __init__(level: int, speed: float) – Configure conveyor level and speed.
+    - \_\_init\_\_(level: int, speed: float) – Configure conveyor level and speed.
     - draw(game_over: bool) – Draw conveyor tiles using config sprites.
 
 == Package
@@ -136,9 +144,16 @@ Collects delivered packages and manages the delivery timing.
     - finish_delivery() – Return to "LOADING", reset timer and empty the truck.
     - draw(level: int) – Draw truck head and bed depending on number_of_packages.
 
-#image("Class Diagram.png")
+#figure(
+  kind: image,
+  image("Class Diagram.png"),
+  caption: [Class diagram.]
+)
 
 = Main algorithms
+
+In order to provide a well-functioning game, we designed algorithms that manage the game logic while providing structure and cohesion to the whole codebase.
+
 == Game loop
 The game loop is managed by Pyxel, which repeatedly calls Main.update() and Main.draw() at a fixed frame rate (60 FPS).
 Main.update() delegates to Board, which first updates the menu, then calls Board.update() only when the menu is closed and the game is not over, ensuring a clean separation between menu and gameplay.
@@ -150,7 +165,7 @@ Character movement is handled in Character.update(max_level), where keyboard inp
 This algorithm ensures simple, discrete vertical movement that matches the conveyor layout.
 
 == Package update and handling algorithm
-The package update algorithm in Board.__package_update_all() iterates over all active Package objects and performs three main steps:
+The package update algorithm in Board.\_\_package_update_all() iterates over all active Package objects and performs three main steps:
   - 1) Synchronize each package's speed with the Conveyor speed at the current level and call package.update().
   - 2) If package.at_the_end() is true, check:
     - If it is at the final conveyor: Luigi can load it into the truck; otherwise it breaks.
@@ -160,7 +175,7 @@ The package update algorithm in Board.__package_update_all() iterates over all a
 Packages in "BROKEN" or "TRUCK" state are removed from the list to keep the system clean.
 
 == Truck delivery timing
-When Truck.number_of_packages reaches a chosen threshold, Board.__truck_delivery() is called:
+When Truck.number_of_packages reaches a chosen threshold, Board.\_\_truck_delivery() is called:
   - Score is increased, deliveries counter is updated and the truck is emptied.
   - Truck.start_delivery() sets the state to "DELIVERY" and remembers the current frame.
   - Characters are set to resting = True and their package flags are cleared.
@@ -175,16 +190,80 @@ The boss system is a simple state machine controlled by boss_active, boss_target
 This avoids nested or overlapping punishments and guarantees that every punishment eventually ends.
 
 = Work done and functionality
-== Implemented functionality
-- Complete game loop and screen using Pyxel (initialization, update, draw)
-- Two playable characters (Mario and Luigi) with separate controls and level‑based movement.
-- Multiple conveyors with configurable speeds per difficulty.
-- Packages that move along conveyors, can be passed between characters and loaded into the truck, or break if missed.
-- Scoring and fail system with game‑over when reaching three fails.
-- Difficulty selection menu that configures number of conveyors, speeds and scoring parameters.
-- Truck that fills with boxes and triggers a timed delivery state during which characters rest.
-- Boss punishment system: boss appears, the failing character is moved to a fixed position and shows reprimand sprites for a short time, pausing gameplay.
-- Simple sound effects.
+
+In here we will explain the features that have been included in the game. We will present it with the same structure and build order according to the sprints we have successfully implemented.
+
+// == Implemented functionality
+// - Complete game loop and screen using Pyxel (initialization, update, draw)
+// - Two playable characters (Mario and Luigi) with separate controls and level‑based movement.
+// - Multiple conveyors with configurable speeds per difficulty.
+// - Packages that move along conveyors, can be passed between characters and loaded into the truck, or break if missed.
+// - Scoring and fail system with game‑over when reaching three fails.
+// - Difficulty selection menu that configures number of conveyors, speeds and scoring parameters.
+// - Truck that fills with boxes and triggers a timed delivery state during which characters rest.
+// - Boss punishment system: boss appears, the failing character is moved to a fixed position and shows reprimand sprites for a short time, pausing gameplay.
+// - Simple sound effects.
+
+== Sprint 1: Objects and graphical interface
+
+- Create a class for each main game element: Characters, Conveyor, Truck, Package, etc.
+- All the behavior logic of each entity must be contained in its corresponding class. Avoid including game logic in the main program (penalty if it occurs).
+-  Design the graphical interface of the scenario: a single screen with the conveyor belts, floors, stairs, and truck.
+- Implement a score counter and error counter (failures) visible during the game.
+- Define the basic data structures that will manage the state of the conveyor belts, packages in transit, and the difficulty level.
+
+== Sprint 2: Mario and Luigi Movement
+
+- Implement the vertical movement control of the characters:
+    - Mario: Arrow Up / Arrow Down keys.
+    - Luigi: W / S keys.
+- Each character must be able to go up and down floors using the stairs, respecting the upper and lower limits.
+- Graphically display the current position of each character (Floor0, Floor1, etc.) on the screen.
+
+== Sprint 3: Packages movement
+
+- Implement the package flow on the conveyor belts according to the established rules:
+    - Conveyor0 generates empty boxes for Mario.
+    - Even Conveyors → controlled by Mario.
+    - Odd Conveyors → controlled by Luigi.
+- Graphical representation of the packages must change according to the belt they are on.
+- When a package reaches the end of a conveyor belt:
+	- If the corresponding character is on the correct floor, they automatically pick it up and pass it to the next conveyor belt.
+	- If not, the package falls and a failure is recorded.
+    - \(_Extra:_\) change the sprite of Mario or Luigi.
+- Implement the automatic movement of packages based on the speed of the current level.
+
+#pagebreak()
+
+== Sprint 4: Scoring system, failures, and end of game
+
+- Implement scoring:
+	- +1 point for each package correctly delivered to the next conveyor belt.
+	- +10 points for each completed truck (8 packages delivered).
+- Manage the failure counter (3 failures = game over).
+- Implement the truck logic and character rest:
+	- When it receives 8 packages, it goes out for delivery.
+	- During delivery, the conveyor belts stop temporarily. If a package is at the last position of the conveyor, it is deleted.
+	- Upon return, activity resumes.
+- Display a game over message or animation when 3 failures are exceeded.
+- Complete Boss’s visual effects: he will appear when a package falls, after rest…
+
+== Sprint 5: Difficulty levels and final adjustments (optional)
+
+- Incorporate the difficulty levels (Easy, Medium, Extreme, Crazy) according to the rule table:
+	- Conveyor belt speed.
+	- Minimum number of packages in play.
+	- Failure elimination rules for truck delivery.
+- Adjust the interface to display the current level.
+- Allow changing the level from the menu or before starting the game.
+- Add optional sound effects: conveyor belt movement, error sounds, etc.
+- Implement high score tables or local competitive mode
+
+== Extra functionality
+
+- Incorporate menu for changing difficulty.
+- Incorporate welcoming screen/start menu (i.e.: a small drawing of the name of the game and animated text inviting to press ENTER to play).
+
 
 = User manual
 - Starting the game:
@@ -200,28 +279,33 @@ This avoids nested or overlapping punishments and guarantees that every punishme
     - Arrow DOWN / S: move character down.
   
 = Conclusions
+
 ==  Final summary
 The project successfully delivers a small but complete 2D game inspired by the Mario Bros. Game & Watch factory game, implemented in Python using Pyxel.
+
 It demonstrates object‑oriented design with classes for the main game controller, characters, conveyors, packages and truck, as well as the use of a simple configuration module for sprites and constants.
+
 == Main problems encountered
+
 Several issues related to game states were encountered, including freezes when the boss or the truck entered special modes and the main loop stopped updating the logic needed to exit those modes.
+
 Additional problems appeared with repeated boss activation during consecutive fails, incorrect character movement while being reprimanded, and overly restrictive package spawn conditions that could leave the game with no new boxes.
+
 The package logic was the hardest part to implement in the game, anyway implementing the individual features wasn't hard, combining them to work properly was the hard part of the project.
+
 == Personal evaluation and improvements
-The project was a good exercise in structuring a game using classes and in handling state machines and timers in a real‑time loop.
-If the project were extended, priority improvements would include adding richer animations for characters and boss, a persistent high‑score system, and a more adaptive difficulty that reacts to the player's performance.
 
+// The project was a good exercise in structuring a game using classes and in handling state machines and timers in a real‑time loop.
+This project was a fun introduction to OOP and quite a challenge. Nevertheless we enjoyed the process of problem-solving and coming up with fixes and features.
 
-
-
-
-
-
-
+If the project were extended, priority improvements would include adding richer animations for characters and boss, a persistent high‑score system with local storage, and a more adaptive difficulty that reacts to the player's performance.
 
 == Issues and solutions
+
 Several typical state-management issues appeared during development, such as the game “freezing” when the boss or truck entered a special state and the main loop stopped updating the logic that should exit that state.
+
 This was solved by centralizing state control inside Board.update, avoiding extra conditions in Main.update, and by using clear boolean flags (boss_active, delivering, resting, reprimand) plus timers to ensure that every special state always has a defined exit.
 
 Another frequent issue was repeated boss activation when multiple boxes failed in a row; this was fixed by wrapping boss activation in if not self.boss_active so a new reprimand cannot start until the previous one has finished.
+
 Finally, the package spawn logic was adjusted to avoid ending up with no boxes after a series of fails, temporarily simplifying the spawn condition while debugging the boss and truck systems.
