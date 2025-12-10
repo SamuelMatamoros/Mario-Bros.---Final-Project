@@ -21,7 +21,7 @@
       nia: 100581710
     ),
   ),
-  professor: "Ángel García Olaya & Martha del Toro",
+  professor: "Ángel García Olaya & Martha Del Toro",
   toc: true,
   logo: "new",
   language: "en",
@@ -56,6 +56,7 @@ Pyxel was selected as the main library because it provides a simple framework fo
 The project also aims to practice modular design by separating the code into classes such as Board, Character, Conveyor, Package and Truck, plus a configuration module config for constants and sprites.
 
 == Game description
+
 The game takes place in a factory where Mario and Luigi must move boxes along several conveyor belts to load them into a truck.
 The player controls each character's vertical position so they can catch and pass boxes in time, avoiding breaks; each delivered box increases the score, while each broken box increases the fail counter, and the game ends when three fails are reached.
 

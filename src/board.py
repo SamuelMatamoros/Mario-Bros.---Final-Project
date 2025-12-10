@@ -357,8 +357,8 @@ class Board:
             pyxel.text(32, 32, f"Height: {config.HEIGHT}", 7)
 
         if level:
-            pyxel.text(196, 32, f"Mario level: {self.mario.level}", 7)
-            pyxel.text(196, 48, f"Luigi level: {self.luigi.level}", 7)
+            pyxel.text(196, 32, f"Mario level: {self.mario.level * 2}", 7)
+            pyxel.text(196, 48, f"Luigi level: {self.luigi.level * 2 + 1}", 7)
 
         if difficulty:
             pyxel.text(196, 32, f"Difficulty: {self.difficulty}", 7)
@@ -687,12 +687,13 @@ class Board:
             self.luigi.update(self.__number_of_conveyors, self.__soundtrack)
 
             if not self.game_start:
-                self.__package_gen()
+                if not self.truck.delivering:
+                    self.__package_gen()
                 self.__package_update_all()
 
             self.__manage_score()
 
-            if self.truck.number_of_packages % 8 == 0 and (
+            if self.truck.number_of_packages % 1 == 0 and (
                     not self.truck.number_of_packages == 0):
                 self.__truck_delivery()
 
@@ -702,7 +703,7 @@ class Board:
 
     def draw(self):
 
-        # self.tests(self, tiles=False, level=True)
+        self.tests(self, tiles=False, level=True)
 
         for conveyor in self.conveyors:
             conveyor.draw(self.exec_halt)
